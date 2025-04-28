@@ -2,7 +2,8 @@ import react from 'react';
 import axios from 'axios';
 import styles from './LoginPage.css';
 
-const handleSubmit = async () =>{
+const handleSubmit = async (e) =>{
+    e.preventDefault();
     try {
         const response = await axios.get('http://localhost:5000/api/login');
         console.log(response.data);
