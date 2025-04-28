@@ -9,7 +9,6 @@ app.use(cors());
 const port = 5000;
 
 
-
 // Sample route
 app.get('/api/login', (req, res) => {
   res.send('test');
