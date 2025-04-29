@@ -1,22 +1,28 @@
 import react from 'react';
 import axios from 'axios';
 import styles from './LoginPage.css';
+import { useAuth } from '../../Contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
+
+function LoginPage() {
+
+const { login } = useAuth();
+const navigate = useNavigate();
 
 const handleSubmit = async (e) =>{
     e.preventDefault();
     try {
         const response = await axios.get('http://localhost:5000/api/login');
         console.log(response.data);
+        const user = {name: 'John', email: 'ettattea@asd.as'};
+        login(user);
+        navigate('/main');
     }catch (error){
         console.error('Error: ', error);
     }
 }
 
- // <div>
-        //     <button className=" m-5 btn btn-primary" onClick={handleClick}>test</button>
-        // </div>
-
-function LoginPage() {
     return (
        <div className='container-fluid d-flex justify-content-center align-items-center vh-100'>
         <div className="face face-front">
