@@ -7,6 +7,8 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 const [selectedGenre, setSelectedGenre] = useState('');
 const [movieTitle, setMovieTitle] = useState('');
 
+const [movies, setMovies] = useState([]);
+
 const searchMovies = async () => {
 
     const path1 = 'https://api.themoviedb.org/3/genre/movie/list';
@@ -19,7 +21,7 @@ const searchMovies = async () => {
         query: movieTitle
       }
     })
-    .then(res => console.log(res.data))
+    .then(res => console.log(res.data.results))
     .catch(err => console.error(err));
   };
 
@@ -35,7 +37,7 @@ const searchMovies = async () => {
         api_key: API_KEY
       }
     })
-    .then(res => console.log(res.data))
+    .then(res => setMovies(res.data.results))
     .catch(err => console.error(err));
   }
 
@@ -70,6 +72,16 @@ const searchMovies = async () => {
 
         <input type="text" name="search" value={movieTitle} onChange={(e) => setMovieTitle(e.target.value)} placeholder="Search for movie"/>
         <button onClick={searchMovies}>TEST</button>
+
+
+          <div className="container-fluid">
+            {movies.map(movie => (
+              <div className="moiveContainer">
+                <p key={movie.id}>{movie.title}</p>
+              </div>
+            ))}
+          </div>
+          
         </div>
     )
 }
