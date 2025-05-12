@@ -11,8 +11,12 @@ const port = 5000;
 
 // Sample route
 app.get('/api/login', (req, res) => {
-  res.send('test');
+  
+  res.send('zalogowano');
 });
+app.get('/api/register', (req, res) => {
+  res.send('zarejestrowano');
+})
 
 // Start the server
 app.listen(port, () => {
