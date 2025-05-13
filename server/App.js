@@ -4,15 +4,17 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors());
-
+app.use(express.json());
 // Set the port
 const port = 5000;
 
 
 // Sample route
-app.get('/api/login', (req, res) => {
-  
-  res.send('zalogowano');
+app.post('/api/login', (req, res) => {
+  const {username, password} = req.body;
+  console.log(username, password);
+  res.json({username: username, password: password, isSucces: true})
+  //res.send("Zalogowano" + username + " " + password);
 });
 app.get('/api/register', (req, res) => {
   res.send('zarejestrowano');

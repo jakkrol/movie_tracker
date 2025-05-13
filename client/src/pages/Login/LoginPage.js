@@ -1,4 +1,4 @@
-import react from 'react';
+import react, { useState } from 'react';
 import axios from 'axios';
 import styles from './LoginPage.css';
 import { useAuth } from '../../Contexts/AuthContext';
@@ -6,17 +6,22 @@ import { useNavigate } from 'react-router-dom';
 
 
 function LoginPage() {
-
 const { login } = useAuth();
 const navigate = useNavigate();
+
+const [data, setData] = useState({
+    username: '',
+    password: ''
+});
 
 const handleSubmit = async (e) =>{
     e.preventDefault();
     try {
-        const response = await axios.get('http://localhost:5000/api/login');
+        const user = {username: 'John', password: 'ettattea@asd.as'};
+        const response = await axios.post('http://localhost:5000/api/login', user);
+
         console.log(response.data);
-        const user = {name: 'John', email: 'ettattea@asd.as'};
-        login(user);
+        login(response.data);
         navigate('/main');
     }catch (error){
         console.error('Error: ', error);
@@ -31,11 +36,11 @@ const handleSubmit = async (e) =>{
                 <h2>Sign in</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="field-wrapper">
-                        <input type="text" name="username" placeholder="username"/>
+                        <input type="text" name="username" placeholder="username" onChange={(e) => setData(prev=>({...prev, username: e.target.value}))}/>
                         <label>username</label>
                     </div>
                     <div className="field-wrapper">
-                        <input type="password" name="password" placeholder="password"/>
+                        <input type="password" name="password" placeholder="password" onChange={(e) => setData(prev=>({...prev, password: e.target.value}))}/>
                         <label>password</label>
                     </div>
                     <div className="field-wrapper">

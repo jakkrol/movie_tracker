@@ -6,6 +6,7 @@ function RequireAuth ({children}) {
     console.log(user);
 
     if(!user){
+        console.log("log out")
         return <Navigate to="/" replace />
     }
 

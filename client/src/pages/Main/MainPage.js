@@ -9,7 +9,7 @@ const [movieTitle, setMovieTitle] = useState('');
 
 const [movies, setMovies] = useState([]);
 
-const searchMovies = async () => {
+const searchByQuery = async () => {
 
     const path1 = 'https://api.themoviedb.org/3/genre/movie/list';
     const path2 = 'https://api.themoviedb.org/3/search/movie';
@@ -28,7 +28,7 @@ const searchMovies = async () => {
 
 
   
-  const handleGenreChange = (e) => {
+  const searchByGenre = (e) => {
     setSelectedGenre(e.target.value);
     const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${e.target.value}&page=1`;
 
@@ -46,7 +46,7 @@ const searchMovies = async () => {
     return(
         <div>
       
-        <select value={selectedGenre} onChange={handleGenreChange}>
+        <select value={selectedGenre} onChange={searchByGenre}>
           <option value = "0">None</option>
           <option value="28">Action</option>
           <option value="12">Adventure</option>
@@ -71,7 +71,7 @@ const searchMovies = async () => {
 
 
         <input type="text" name="search" value={movieTitle} onChange={(e) => setMovieTitle(e.target.value)} placeholder="Search for movie"/>
-        <button onClick={searchMovies}>TEST</button>
+        <button onClick={searchByQuery}>TEST</button>
 
 
           <div className="container-fluid">
