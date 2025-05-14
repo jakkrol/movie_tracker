@@ -17,7 +17,7 @@ const [data, setData] = useState({
 const handleSubmit = async (e) =>{
     e.preventDefault();
     try {
-        const user = {username: 'John', password: 'ettattea@asd.as'};
+        const user = {username: data.username, password: data.password};
         const response = await axios.post('http://localhost:5000/api/login', user);
 
         console.log(response.data);

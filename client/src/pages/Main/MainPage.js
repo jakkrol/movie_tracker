@@ -1,13 +1,18 @@
 import react, { useState } from "react";
 import { useAuth } from "../../Contexts/AuthContext";
 import axios from 'axios';
+import { Navigate, Route, useNavigate } from "react-router-dom";
+import MoviePreviewPage from "./MoviePreviewPage";
+import { BrowserRouter as Router, Routes } from 'react-router-dom';
 
 function MainPage() {
 const API_KEY = process.env.REACT_APP_API_KEY;
+const navigate = useNavigate();
+
 const [selectedGenre, setSelectedGenre] = useState('');
 const [movieTitle, setMovieTitle] = useState('');
-
 const [movies, setMovies] = useState([]);
+const [selectedMovie, setSelectedMovie] = useState(null);
 
 const searchByQuery = async () => {
 
@@ -21,7 +26,7 @@ const searchByQuery = async () => {
         query: movieTitle
       }
     })
-    .then(res => console.log(res.data.results))
+    .then(res => setMovies(res.data.results))
     .catch(err => console.error(err));
   };
 
@@ -39,6 +44,12 @@ const searchByQuery = async () => {
     })
     .then(res => setMovies(res.data.results))
     .catch(err => console.error(err));
+  }
+
+
+  const handleMovieClick = (e) => {
+    setSelectedMovie(e);
+    navigate("details", {state: {e}});
   }
 
 
@@ -76,12 +87,27 @@ const searchByQuery = async () => {
 
           <div className="container-fluid">
             {movies.map(movie => (
-              <div className="moiveContainer">
-                <p key={movie.id}>{movie.title}</p>
+              <div className="moiveContainer" onClick={() => handleMovieClick(movie)}>
+                <p key={movie.id} >{movie.title}</p>
               </div>
             ))}
           </div>
           
+
+
+            {/* <Routes>
+              <Route
+                path="detail"
+                element={
+                  selectedMovie ?(
+                    <MoviePreviewPage movie={selectedMovie}/>
+                  ) : (
+                    <Navigate to="/main"/>
+                  )
+                }>
+
+              </Route>
+            </Routes> */}
         </div>
     )
 }

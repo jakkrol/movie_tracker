@@ -16,7 +16,8 @@ app.post('/api/login', (req, res) => {
   res.json({username: username, password: password, isSucces: true})
   //res.send("Zalogowano" + username + " " + password);
 });
-app.get('/api/register', (req, res) => {
+app.post('/api/register', (req, res) => {
+  const {username, password} = req.body;
   res.send('zarejestrowano');
 })
 
