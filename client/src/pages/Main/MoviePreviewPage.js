@@ -1,15 +1,22 @@
 import react, {useState} from "react";
 import { useAuth } from "../../Contexts/AuthContext";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 function MoviePreviewPage(){
-    const {state} = useLocation();
-    const movie = state.e;
+    const location = useLocation();
+    const movie = location.state?.e;
+    if(!movie){
+        return <Navigate to="/main"/>
+    }
+
     console.log(movie.title);
 
+
     return (
-       <p>Hello</p>
+       <div className="container-fluid">
+        
+       </div>
     )
 }
 
