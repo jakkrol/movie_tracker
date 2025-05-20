@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useState, useEffect } from "react";
 import { useAuth } from "../../Contexts/AuthContext";
 import axios from 'axios';
 import { Navigate, Route, useNavigate } from "react-router-dom";
@@ -9,6 +9,8 @@ function MainPage() {
 const API_KEY = process.env.REACT_APP_API_KEY;
 const navigate = useNavigate();
 
+const [searchMode, setSearchMode] = useState('');
+const [pageNumber, setPageNumber] = useState(1);
 const [selectedGenre, setSelectedGenre] = useState('');
 const [movieTitle, setMovieTitle] = useState('');
 const [movies, setMovies] = useState([]);
@@ -18,7 +20,6 @@ const searchByQuery = async () => {
 
     const path1 = 'https://api.themoviedb.org/3/genre/movie/list';
     const path2 = 'https://api.themoviedb.org/3/search/movie';
-    const path3 = 'https://api.themoviedb.org/3/discover/movie?api_key=YOUR_API_KEY&with_genres=28';
 
     axios.get(path2, {
       params: {
@@ -30,12 +31,9 @@ const searchByQuery = async () => {
     .catch(err => console.error(err));
   };
 
-
-
   
-  const searchByGenre = (e) => {
-    setSelectedGenre(e.target.value);
-    const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${e.target.value}&page=1`;
+  const searchByGenre = async () => {
+    const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${selectedGenre}&page=${pageNumber}`;
 
     axios.get(path3, {
       params: {
@@ -52,12 +50,29 @@ const searchByQuery = async () => {
     navigate("details", {state: {e}});
   }
 
+  const handlePageButtonClick = (e) => {
+    if(e === 'r'){
+      setPageNumber(prev => prev + 1);
+    }else{
+      if(pageNumber != 1){
+        setPageNumber(prev => prev - 1);
+      }
+    }
+  }
 
+  useEffect(()=> {
+    if(searchMode == 'genre'){
+    searchByGenre();
+    }
+    if(searchMode == 'query'){
+      searchByQuery();
+    }
+  },[pageNumber, selectedGenre, selectedMovie]);
 
     return(
         <div>
       
-        <select value={selectedGenre} onChange={searchByGenre}>
+        <select value={selectedGenre} onChange={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('genre')}}>
           <option value = "0">None</option>
           <option value="28">Action</option>
           <option value="12">Adventure</option>
@@ -82,7 +97,7 @@ const searchByQuery = async () => {
 
 
         <input type="text" name="search" value={movieTitle} onChange={(e) => setMovieTitle(e.target.value)} placeholder="Search for movie"/>
-        <button onClick={searchByQuery}>TEST</button>
+        <button onClick={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('query')}}>TEST</button>
 
 
           <div className="container-fluid">
@@ -94,7 +109,10 @@ const searchByQuery = async () => {
           </div>
           
 
-
+          <div className="navigation">
+            <button onClick={() => handlePageButtonClick('l')}>left</button>
+            <button onClick={() => handlePageButtonClick('r')}>right</button>
+          </div>
             {/* <Routes>
               <Route
                 path="detail"

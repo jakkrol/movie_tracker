@@ -21,7 +21,7 @@ app.post('/api/register', (req, res) => {
   res.send('zarejestrowano');
 })
 
-app.use('/*', (req, res) => {
+app.use((req, res) => {
   res.status(404).send("Wystapil blad: 404");
 } )
 
