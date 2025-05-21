@@ -19,7 +19,7 @@ const [selectedMovie, setSelectedMovie] = useState(null);
 const searchByQuery = async () => {
 
     const path1 = 'https://api.themoviedb.org/3/genre/movie/list';
-    const path2 = 'https://api.themoviedb.org/3/search/movie';
+    const path2 = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&page=${pageNumber}`;
 
     axios.get(path2, {
       params: {
@@ -67,12 +67,12 @@ const searchByQuery = async () => {
     if(searchMode == 'query'){
       searchByQuery();
     }
-  },[pageNumber, selectedGenre, selectedMovie]);
+  },[pageNumber]);
 
     return(
         <div>
       
-        <select value={selectedGenre} onChange={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('genre')}}>
+        <select value={selectedGenre} onChange={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('genre'); searchByGenre()}}>
           <option value = "0">None</option>
           <option value="28">Action</option>
           <option value="12">Adventure</option>
@@ -97,7 +97,7 @@ const searchByQuery = async () => {
 
 
         <input type="text" name="search" value={movieTitle} onChange={(e) => setMovieTitle(e.target.value)} placeholder="Search for movie"/>
-        <button onClick={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('query')}}>TEST</button>
+        <button onClick={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('query'); searchByQuery()}}>TEST</button>
 
 
           <div className="container-fluid">
