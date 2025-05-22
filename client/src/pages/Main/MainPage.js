@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Navigate, Route, useNavigate } from "react-router-dom";
 import MoviePreviewPage from "./MoviePreviewPage";
 import { BrowserRouter as Router, Routes } from 'react-router-dom';
+import styles from './Main.css';
 
 function MainPage() {
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -42,6 +43,8 @@ const searchByQuery = async () => {
     })
     .then(res => setMovies(res.data.results))
     .catch(err => console.error(err));
+
+    console.log(movies);  
   }
 
 
@@ -102,8 +105,11 @@ const searchByQuery = async () => {
 
           <div className="container-fluid">
             {movies.map(movie => (
-              <div className="moiveContainer" onClick={() => handleMovieClick(movie)}>
-                <p key={movie.id} >{movie.title}</p>
+              <div key={movie.id} className="movieContainer" onClick={() => handleMovieClick(movie)}>
+                <p>{movie.title}</p>
+                <p>{movie.release_date}</p>
+                <p>{movie.vote_average}</p>
+                <img src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt="movie image poster" className="moviePoster"></img>
               </div>
             ))}
           </div>
