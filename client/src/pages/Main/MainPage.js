@@ -74,7 +74,7 @@ const searchByQuery = async () => {
   },[pageNumber]);
 
     return(
-        <div>
+        <div className="wrapper">
       
         <select value={selectedGenre} onChange={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('genre'); searchByGenre()}}>
           <option value = "0">None</option>
@@ -98,12 +98,12 @@ const searchByQuery = async () => {
           <option value="10752">War</option>
           <option value="37">Western</option>
         </select>
-
-
         <input type="text" name="search" value={movieTitle} onChange={(e) => setMovieTitle(e.target.value)} placeholder="Search for movie"/>
         <button onClick={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('query'); searchByQuery()}}>TEST</button>
 
-        <div className="container-fluid">
+
+
+        <div className="container-fluid main">
           <div className="row g-4 px-3">
             {movies.map(movie => (
               <div
@@ -133,22 +133,9 @@ const searchByQuery = async () => {
           
 
           <div className="navigation">
-            <button onClick={() => handlePageButtonClick('l')}>left</button>
-            <button onClick={() => handlePageButtonClick('r')}>right</button>
+            <button class="button-87" role="button" onClick={() => handlePageButtonClick('l')}>Previous</button>
+            <button class="button-87" role="button" onClick={() => handlePageButtonClick('r')}>Next</button>
           </div>
-            {/* <Routes>
-              <Route
-                path="detail"
-                element={
-                  selectedMovie ?(
-                    <MoviePreviewPage movie={selectedMovie}/>
-                  ) : (
-                    <Navigate to="/main"/>
-                  )
-                }>
-
-              </Route>
-            </Routes> */}
         </div>
     )
 }
