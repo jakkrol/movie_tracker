@@ -5,7 +5,7 @@ const app = express();
 
 // 🔐 CORS config
 const allowedOrigins = [
-  'https://movie-tracker-x088.onrender.com',
+  'https://superfilmy.onrender.com',
   'http://localhost:3000'
 ];
 
