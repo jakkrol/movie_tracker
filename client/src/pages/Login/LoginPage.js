@@ -1,5 +1,5 @@
 import react, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import styles from './LoginPage.css';
 import { useAuth } from '../../Contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ const handleSubmit = async (e) =>{
     e.preventDefault();
     try {
         const user = {username: data.username, password: data.password};
-        const response = await axios.post('http://localhost:5000/api/login', user);
+        const response = await axios.post('api/login', user);
 
         console.log(response.data);
         login(response.data);

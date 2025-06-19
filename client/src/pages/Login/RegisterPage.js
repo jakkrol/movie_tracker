@@ -1,5 +1,5 @@
 import react, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import styles from './LoginPage.css';
 import { useAuth } from '../../Contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ function RegisterPage() {
             console.log("Very gucci")
             try{
                 const registerUser = {name: data.username, password: data.password};
-                const response = await axios.post('http://localhost:5000/api/register', registerUser);
+                const response = await axios.post('api/register', registerUser);
                 console.log(response.data);
                 navigate('/');
             }catch{}
