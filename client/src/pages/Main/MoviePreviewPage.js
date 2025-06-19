@@ -9,8 +9,21 @@ function MoviePreviewPage(){
     if(!movie){
         return <Navigate to="/main"/>
     }
+    console.log(movie);
 
-    console.log(movie.title);
+//     useEffect(() => {
+//     async function fetchCast() {
+//       try {
+//         const res = await fetch(
+//           `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=YOUR_API_KEY&language=pl-PL`
+//         );
+//         const data = await res.json();
+//         setCast(data.cast);
+//       } catch (err) {
+//         console.error("Błąd podczas pobierania obsady:", err);
+//       }
+//     }
+//   },[]);
 
 
     return (

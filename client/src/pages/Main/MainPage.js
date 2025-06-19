@@ -12,7 +12,7 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 const navigate = useNavigate();
 
 const [searchMode, setSearchMode] = useState('');
-const [pageNumber, setPageNumber] = useState(1);
+const [pageNumber, setPageNumber] = useState('');
 const [selectedGenre, setSelectedGenre] = useState('');
 const [movieTitle, setMovieTitle] = useState('');
 const [movies, setMovies] = useState([]);
@@ -55,15 +55,29 @@ const searchByQuery = async () => {
   }
 
   const handlePageButtonClick = (e) => {
+    const page = Number(pageNumber);
     if(e === 'r'){
-      setPageNumber(prev => prev + 1);
+      setPageNumber(page + 1);
     }else{
-      if(pageNumber != 1){
-        setPageNumber(prev => prev - 1);
+      if(page != 1){
+        setPageNumber(page - 1);
       }
     }
+    console.log("PAGE NUMBER:---->" + pageNumber)
   }
+  useEffect(()=>{
+    const storedMovies = localStorage.getItem('movieList');
+    const storedSelectedGenre = localStorage.getItem('genre');
+    const storedSearchMode = localStorage.getItem('mode');
+    const storedMovieTitle = localStorage.getItem('title');
+    const storedPageNumber = localStorage.getItem('page');
 
+    if(storedMovies) setSelectedMovie(storedMovies);
+    if(storedPageNumber) setPageNumber(storedPageNumber);
+    if(storedSelectedGenre) setSelectedGenre(storedSelectedGenre);
+    if(storedMovieTitle) setMovieTitle(storedMovieTitle);
+    if(storedSearchMode) setSearchMode(storedSearchMode);
+  },[])
   useEffect(()=> {
     if(searchMode == 'genre'){
     searchByGenre();
@@ -71,12 +85,28 @@ const searchByQuery = async () => {
     if(searchMode == 'query'){
       searchByQuery();
     }
+    localStorage.setItem('page', pageNumber);
   },[pageNumber]);
 
+  useEffect(()=>{
+    localStorage.setItem('mode', searchMode);
+  }, [searchMode]);
+    useEffect(()=>{
+    localStorage.setItem('genre', selectedGenre);
+  }, [selectedGenre]);
+    useEffect(()=>{
+    localStorage.setItem('movieList', movies)
+  }, [movies]);
+    useEffect(()=>{
+    localStorage.setItem('title', movieTitle)
+  }, [movieTitle]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pageNumber]);
     return(
-        <div className="wrapper">
-      
-        <select value={selectedGenre} onChange={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('genre'); searchByGenre()}}>
+        <div className="wrapper">  
+        <select className="searchers" value={selectedGenre} onChange={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('genre'); searchByGenre()}}>
           <option value = "0">None</option>
           <option value="28">Action</option>
           <option value="12">Adventure</option>
@@ -98,19 +128,33 @@ const searchByQuery = async () => {
           <option value="10752">War</option>
           <option value="37">Western</option>
         </select>
-        <input type="text" name="search" value={movieTitle} onChange={(e) => setMovieTitle(e.target.value)} placeholder="Search for movie"/>
-        <button onClick={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('query'); searchByQuery()}}>TEST</button>
 
-
+        <div style={{ display: 'flex', alignItems: 'center', margin: '0px 0px 20px 0px' }}> 
+        <input
+          className="searchers"
+          type="text"
+          name="search"
+          value={movieTitle}
+          onChange={(e) => setMovieTitle(e.target.value)}
+          placeholder="Search for movie"
+        />
+        <button
+          className="search-button"
+          onClick={() => {
+            setSelectedGenre('');
+            setPageNumber(1);
+            setSearchMode('query');
+            searchByQuery();
+          }}
+        >
+          Search
+        </button>
+      </div>
 
         <div className="container-fluid main">
           <div className="row g-4 px-3">
             {movies.map(movie => (
-              <div
-                key={movie.id}
-                className="col-12 col-sm-6 col-md-4 col-lg-3"
-                onClick={() => handleMovieClick(movie)}
-              >
+              <div key={movie.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div className="card" tabIndex="0">
                   <div className="card_image">
                     <img src={movie.poster_path ? `https://image.tmdb.org/t/p/original/${movie.poster_path}` : fallback} alt={`${movie.title} poster`} />
@@ -121,6 +165,9 @@ const searchByQuery = async () => {
                       <p><strong>Release Date:</strong> {movie.release_date}</p>
                       <p><strong>Rating:</strong> {movie.vote_average} / 10</p>
                       <p>{movie.overview ? movie.overview : "No description available."}</p>
+                    </div>
+                    <div className="full_description">
+                      <p onClick={() => handleMovieClick(movie)}>Check full site</p>
                     </div>
                   </div>
                 </div>
@@ -134,6 +181,7 @@ const searchByQuery = async () => {
 
           <div className="navigation">
             <button class="button-87" role="button" onClick={() => handlePageButtonClick('l')}>Previous</button>
+            <div className="number">{pageNumber}</div>
             <button class="button-87" role="button" onClick={() => handlePageButtonClick('r')}>Next</button>
           </div>
         </div>
