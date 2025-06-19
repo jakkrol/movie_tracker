@@ -20,8 +20,8 @@ const [selectedMovie, setSelectedMovie] = useState(null);
 
 const searchByQuery = async () => {
 
-    const path1 = 'https://api.themoviedb.org/3/genre/movie/list';
-    const path2 = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&page=${pageNumber}`;
+    const path1 = 'https://api.themoviedb.org/3/genre/movie/list&language=pl-PL';
+    const path2 = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&page=${pageNumber}&language=pl-PL`;
 
     axios.get(path2, {
       params: {
@@ -35,7 +35,7 @@ const searchByQuery = async () => {
 
   
   const searchByGenre = async () => {
-    const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${selectedGenre}&page=${pageNumber}`;
+    const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${selectedGenre}&page=${pageNumber}&language=pl-PL`;
 
     axios.get(path3, {
       params: {
