@@ -18,35 +18,73 @@ const [movieTitle, setMovieTitle] = useState('');
 const [movies, setMovies] = useState([]);
 const [selectedMovie, setSelectedMovie] = useState(null);
 
+  // const searchByGenre = async () => {
+  //   const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${selectedGenre}&page=${pageNumber}&language=pl-PL`;
+
+  //   axios.get(path3, {
+  //     params: {
+  //       api_key: API_KEY
+  //     }
+  //   })
+  //   .then(res => setMovies(res.data.results))
+  //   .catch(err => console.error(err));
+
+  //   console.log(movies);  
+  // }
+
+  // const searchByQuery = async () => {
+
+  //   const path1 = 'https://api.themoviedb.org/3/genre/movie/list&language=pl-PL';
+  //   const path2 = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&page=${pageNumber}&language=pl-PL`;
+
+  //   axios.get(path2, {
+  //     params: {
+  //       api_key: API_KEY,
+  //       query: movieTitle
+  //     }
+  //   })
+  //   .then(res => setMovies(res.data.results))
+  //   .catch(err => console.error(err));
+  // };
+
 const searchByQuery = async () => {
+try{
+    //const path1 = 'https://api.themoviedb.org/3/genre/movie/list&language=pl-PL';
+    const path2 = `https://api.themoviedb.org/3/search/movie`;
 
-    const path1 = 'https://api.themoviedb.org/3/genre/movie/list&language=pl-PL';
-    const path2 = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&page=${pageNumber}&language=pl-PL`;
-
-    axios.get(path2, {
+    const res = await axios.get(path2, {
       params: {
         api_key: API_KEY,
-        query: movieTitle
+        query: movieTitle,
+        page: pageNumber,
+        language: 'pl-PL'
       }
-    })
-    .then(res => setMovies(res.data.results))
-    .catch(err => console.error(err));
-  };
+    });
 
-  
-  const searchByGenre = async () => {
-    const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${selectedGenre}&page=${pageNumber}&language=pl-PL`;
-
-    axios.get(path3, {
-      params: {
-        api_key: API_KEY
-      }
-    })
-    .then(res => setMovies(res.data.results))
-    .catch(err => console.error(err));
-
-    console.log(movies);  
+    setMovies(res.data.results);
+    console.log(res.data.results);
+  } catch (error) {
+    console.error('Error while fetching by query: ', error);
   }
+};
+
+  const searchByGenre = async () => {
+  try {
+    const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+      params: {
+        api_key: API_KEY,
+        with_genres: selectedGenre,
+        page: pageNumber,
+        language: 'pl-PL'
+      }
+    });
+
+    setMovies(response.data.results);
+    console.log(response.data.results); 
+  } catch (error) {
+    console.error('Error while fetching movies by genre:', error);
+  }
+};
 
 
   const handleMovieClick = (e) => {
