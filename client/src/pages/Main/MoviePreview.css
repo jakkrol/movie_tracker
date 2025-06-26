@@ -1,0 +1,113 @@
+:root {
+  --background: #121212;
+  --card-bg: #1e1e1e;
+  --primary: #e50914;
+  --secondary: #b81d24;
+  --text: #f5f5f5;
+  --muted: #999;
+  --accent: #ff3b6c;
+}
+
+.movie-detail-container {
+  background-color: var(--card-bg);
+  color: var(--text);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.25);
+  margin-top: 2rem;
+}
+
+.movie-poster {
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.card_content.movie-info p {
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+  color: var(--text);
+}
+
+.card_content.movie-info strong {
+  color: var(--accent);
+}
+
+.movie-title {
+  font-family: 'Georgia', serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.full_description.movie-overview {
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 0.75rem;
+  color: var(--text);
+}
+
+.section-heading {
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.cast-section {
+  margin-top: 3rem;
+}
+
+.cast-member {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(229, 9, 20, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1rem;  
+}
+
+.cast-member:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(229, 9, 20, 0.3);
+}
+
+.actor-photo {
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.2);
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.actor-name {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.actor-role {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.keyword-section {
+  margin-top: 2rem;
+}
+
+.keyword-list {
+  padding-left: 0;
+}
+
+.keyword-badge {
+  background-color: var(--secondary) !important;
+  color: white;
+  font-size: 0.85rem;
+  border-radius: 20px;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 0.5rem;
+}
