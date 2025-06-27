@@ -5,6 +5,7 @@ import axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
 import fallback from '../../Img/missing_img.png';
 import styles from './MoviePreview.css';
+import Header from '../../Components/Header';
 
 
 function MoviePreviewPage(){
@@ -54,8 +55,11 @@ function MoviePreviewPage(){
     if (!movieData)
         return <div className="text-center mt-5">Nie udało się załadować danych filmu.</div>;
 
+    
     return (
-    <div className="container mt-4 movie-detail-container">
+    <div>
+        <Header/>
+        <div className="container mt-4 movie-detail-container">
         <div className="row">
             {/* Poster */}
             <div className="col-md-4">
@@ -125,6 +129,7 @@ function MoviePreviewPage(){
             </ul>
             </div>
         )}
+    </div>
     </div>
     )
 }

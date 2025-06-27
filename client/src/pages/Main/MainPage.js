@@ -6,6 +6,7 @@ import MoviePreviewPage from "./MoviePreviewPage";
 import { BrowserRouter as Router, Routes } from 'react-router-dom';
 import styles from './Main.css';
 import fallback from '../../Img/missing_img.png';
+import Header from '../../Components/Header';
 
 function MainPage() {
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -18,41 +19,11 @@ const [movieTitle, setMovieTitle] = useState('');
 const [movies, setMovies] = useState([]);
 const [selectedMovie, setSelectedMovie] = useState(null);
 
-  // const searchByGenre = async () => {
-  //   const path3 = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${selectedGenre}&page=${pageNumber}&language=pl-PL`;
-
-  //   axios.get(path3, {
-  //     params: {
-  //       api_key: API_KEY
-  //     }
-  //   })
-  //   .then(res => setMovies(res.data.results))
-  //   .catch(err => console.error(err));
-
-  //   console.log(movies);  
-  // }
-
-  // const searchByQuery = async () => {
-
-  //   const path1 = 'https://api.themoviedb.org/3/genre/movie/list&language=pl-PL';
-  //   const path2 = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&page=${pageNumber}&language=pl-PL`;
-
-  //   axios.get(path2, {
-  //     params: {
-  //       api_key: API_KEY,
-  //       query: movieTitle
-  //     }
-  //   })
-  //   .then(res => setMovies(res.data.results))
-  //   .catch(err => console.error(err));
-  // };
-
 const searchByQuery = async () => {
 try{
-    //const path1 = 'https://api.themoviedb.org/3/genre/movie/list&language=pl-PL';
-    const path2 = `https://api.themoviedb.org/3/search/movie`;
+    const path = `https://api.themoviedb.org/3/search/movie`;
 
-    const res = await axios.get(path2, {
+    const res = await axios.get(path, {
       params: {
         api_key: API_KEY,
         query: movieTitle,
@@ -142,8 +113,11 @@ try{
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [pageNumber]);
+
+
     return(
         <div className="wrapper">  
+        <Header/>
         <select className="searchers" value={selectedGenre} onChange={(e) => {setSelectedGenre(e.target.value); setPageNumber(1); setSearchMode('genre'); searchByGenre()}}>
           <option value = "0">None</option>
           <option value="28">Action</option>
