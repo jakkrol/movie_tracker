@@ -21,11 +21,18 @@ function RegisterPage() {
         if(data.password === data.repeat_password){
             console.log("Very gucci")
             try{
-                const registerUser = {name: data.username, password: data.password};
+                const registerUser = {username: data.username, password: data.password};
                 const response = await axios.post('api/register', registerUser);
                 console.log(response.data);
                 navigate('/');
-            }catch{}
+            }catch(err){
+                if(err.response) {
+                    console.log(err.response.data.message);
+                    alert(err.response.data.message);
+                }else{
+                    console.log(err.message);
+                }
+            }
         }
     }
 

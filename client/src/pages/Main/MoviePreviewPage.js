@@ -119,10 +119,7 @@ function MoviePreviewPage(){
             <h4 className="section-heading">Słowa kluczowe</h4>
             <ul className="list-inline keyword-list">
                 {movieData.keywords.keywords.map((kw) => (
-                <li
-                    key={kw.id}
-                    className="list-inline-item badge bg-secondary me-2 keyword-badge"
-                >
+                <li key={kw.id} className="list-inline-item badge bg-secondary me-2 keyword-badge">
                     {kw.name}
                 </li>
                 ))}

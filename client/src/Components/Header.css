@@ -1,0 +1,19 @@
+
+.navbar-nav {
+  gap: 1rem; /* odstęp między linkami */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center; /* wyrównanie pionowe linków w elemencie li */
+}
+
+.nav-link {
+  display: flex;
+  align-items: center; /* wyrównanie pionowe tekstu */
+  line-height: 1;      /* wyeliminuj różnice w linii */
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  vertical-align: middle;
+}

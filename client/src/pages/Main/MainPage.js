@@ -189,12 +189,10 @@ try{
         </div>
 
 
-          
-
           <div className="navigation">
-            <button class="button-87" role="button" onClick={() => handlePageButtonClick('l')}>Previous</button>
+            <button className="button-87" role="button" onClick={() => handlePageButtonClick('l')}>Previous</button>
             <div className="number">{pageNumber}</div>
-            <button class="button-87" role="button" onClick={() => handlePageButtonClick('r')}>Next</button>
+            <button className="button-87" role="button" onClick={() => handlePageButtonClick('r')}>Next</button>
           </div>
         </div>
     )

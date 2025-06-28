@@ -23,8 +23,13 @@ const handleSubmit = async (e) =>{
         console.log(response.data);
         login(response.data);
         navigate('/main');
-    }catch (error){
-        console.error('Error: ', error);
+    }catch(err){
+        if(err.response) {
+            console.log(err.response.data.message);
+            alert(err.response.data.message);
+        }else{
+            console.log(err.message);
+        }
     }
 }
 
