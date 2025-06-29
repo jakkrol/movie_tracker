@@ -10,14 +10,14 @@ const { login } = useAuth();
 const navigate = useNavigate();
 
 const [data, setData] = useState({
-    username: '',
+    login: '',
     password: ''
 });
 
 const handleSubmit = async (e) =>{
     e.preventDefault();
     try {
-        const user = {username: data.username, password: data.password};
+        const user = {login: data.login, password: data.password};
         const response = await axios.post('api/login', user);
 
         console.log(response.data);
@@ -41,8 +41,8 @@ const handleSubmit = async (e) =>{
                 <h2>Sign in</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="field-wrapper">
-                        <input type="text" name="username" placeholder="username" onChange={(e) => setData(prev=>({...prev, username: e.target.value}))}/>
-                        <label>username</label>
+                        <input type="text" name="username" placeholder="username" onChange={(e) => setData(prev=>({...prev, login: e.target.value}))}/>
+                        <label>login</label>
                     </div>
                     <div className="field-wrapper">
                         <input type="password" name="password" placeholder="password" onChange={(e) => setData(prev=>({...prev, password: e.target.value}))}/>

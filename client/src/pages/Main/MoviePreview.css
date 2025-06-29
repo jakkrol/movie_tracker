@@ -111,3 +111,42 @@
   padding: 0.4rem 0.8rem;
   margin-bottom: 0.5rem;
 }
+
+/* Dark card style for recommendations */
+.recommendation-card {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border: 1px solid #333;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.recommendation-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.recommendation-card .card-body {
+  background-color: #2a2a2a;
+  padding: 12px;
+}
+
+.recommendation-card img {
+  object-fit: cover;
+  height: 300px;
+  width: 100%;
+  border-bottom: 1px solid #333;
+}
+
+.recommendation-card .card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.recommendation-card .card-text {
+  font-size: 0.85rem;
+  color: #cccccc;
+}
+

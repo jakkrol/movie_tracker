@@ -126,9 +126,37 @@ function MoviePreviewPage(){
             </ul>
             </div>
         )}
-    </div>
+        {/* Recommendations */}
+        {movieData.recommendations.results.length > 0 && (
+        <div className="mt-5 recommendations-section">
+            <h3 className="section-heading">Polecane filmy</h3>
+            <div className="row">
+            {movieData.recommendations.results.slice(0, 8).map((rec) => (
+                <div key={rec.id} className="col-6 col-md-3 mb-4">
+                <div className="card recommendation-card h-100">
+                    <img
+                    src={rec.poster_path ? `https://image.tmdb.org/t/p/w500${rec.poster_path}` : fallback}
+                    alt={rec.title}
+                    className="img-fluid rounded"
+                    />
+                    <div className="card-body p-2">
+                    <h5 className="card-title fs-6 mb-1">{rec.title}</h5>
+                    <p className="card-text small mb-0">
+                        {rec.release_date ? rec.release_date : 'Brak daty'}
+                    </p>
+                    </div>
+                </div>
+                </div>
+            ))}
+            </div>
+        </div>
+        )}
+
+    </div>    
     </div>
     )
 }
+
+
 
 export default MoviePreviewPage;
