@@ -1,5 +1,5 @@
 import react, { useState } from 'react';
-import axios from '../../api/axios';
+import { axiosLogin } from '../../api/axios';
 import styles from './LoginPage.css';
 import { useAuth } from '../../Contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,21 +16,12 @@ const [data, setData] = useState({
 
 const handleSubmit = async (e) =>{
     e.preventDefault();
-    try {
-        const user = {login: data.login, password: data.password};
-        const response = await axios.post('api/login', user);
-
-        console.log(response.data);
-        login(response.data);
-        navigate('/main');
-    }catch(err){
-        if(err.response) {
-            console.log(err.response.data.message);
-            alert(err.response.data.message);
-        }else{
-            console.log(err.message);
+    const responseData = await axiosLogin(data); 
+    console.log(responseData);
+        if (responseData) {
+            login(responseData); 
+            navigate('/main');
         }
-    }
 }
 
 

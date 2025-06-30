@@ -1,5 +1,5 @@
 import react, { useState } from 'react';
-import axios from '../../api/axios';
+import { axiosRegister } from '../../api/axios';
 import styles from './LoginPage.css';
 import { useAuth } from '../../Contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,32 +7,20 @@ import { useNavigate } from 'react-router-dom';
 function RegisterPage() {
     const navigate = useNavigate()
     const [data, setData] = useState({
-        username: '',
+        login: '',
         password: '',
         repeat_password: ''
     })
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(data.username);
+        console.log(data.login);
         console.log(data.password);
         console.log(data.repeat_password);
 
-        if(data.password === data.repeat_password){
-            console.log("Very gucci")
-            try{
-                const registerUser = {username: data.username, password: data.password};
-                const response = await axios.post('api/register', registerUser);
-                console.log(response.data);
-                navigate('/');
-            }catch(err){
-                if(err.response) {
-                    console.log(err.response.data.message);
-                    alert(err.response.data.message);
-                }else{
-                    console.log(err.message);
-                }
-            }
+        const register = await axiosRegister(data);
+        if(register) {
+            navigate("/");
         }
     }
 
@@ -43,7 +31,7 @@ function RegisterPage() {
                 <h2>Register</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="field-wrapper">
-                        <input type="text" name="username" placeholder="username" onChange={(e) => setData(prev=>({...prev, username: e.target.value}))}/>
+                        <input type="text" name="username" placeholder="username" onChange={(e) => setData(prev=>({...prev, login: e.target.value}))}/>
                         <label>username</label>
                     </div>
                     <div className="field-wrapper">

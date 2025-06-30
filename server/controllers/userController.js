@@ -28,17 +28,29 @@ module.exports.userLogin = async (req, res, next) =>{
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '15m' }
             )
+
+            const refreshToken = jwt.sign(
+                { "login": user.login },
+                process.env.REFRESH_TOKEN_SECRET,
+                { expiresIn: '1d' }
+            )
+            res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24*60*60*1000});
+
             return handleResponse(res, 200, "Login success", {token: accessToken, user: { login: user.login } });
         }else{
-            return handleResponse(res, 401, "Wrong password"); 
+            return handleResponse(res, 401, "Wrong password");
         }
     }catch(err){
         next(err);
     }
 };
 
+
 module.exports.userRegister = async (req, res, next) =>{
     const { login, password } = req.body;
+    console.log(req.body);
+    console.log(login);
+    console.log(password);
     if(!login || !password || login.trim() == '' || password.trim() == ''){
         return handleResponse(res, 404, "Username and password required and cannot be empty");
     }
