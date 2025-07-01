@@ -1,12 +1,28 @@
 const pool = require("../config/db");
 
 module.exports.userLoginService = async (login) => {
-    const result = await pool.query("SELECT * FROM users where login = $1", [login]);
+    const result = await pool.query("SELECT * FROM users WHERE login = $1", [login]);
     return result.rows[0];
 }
 
-module.exports.userRegisterService = async (username, password) => {
-    const result = await pool.query("INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *", [username, password]);
+module.exports.userRegisterService = async (login, password) => {
+    const result = await pool.query("INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *", [login, password]);
     return result.rows[0];
 }
 
+
+module.exports.checkIfMovieExist = async (movieId) => {
+    const result = await pool.query("SELECT * FROM movies WHERE movie_id = $1", [movieId]);
+    return result.rows[0];
+}
+
+module.exports.addMovie = async (movieId, data) => {
+    await pool.query("INSERT INTO movies (movie_id, data) VALUES ($1, $2)", [movieId, data]);
+}
+
+module.exports.addMovieToWatchlist = async (login, movieId) => {
+    const userResult = await pool.query("SELECT id FROM users WHERE login = $1", [login]);
+    
+    const userId = userResult.rows[0].id;
+    //await pool.query("INSERT INTO watchlist (user_id, movie_id) VALUES ($1, $2)", [login, movieId]);
+}

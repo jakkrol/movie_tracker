@@ -18,6 +18,7 @@ function MoviePreviewPage(){
 
 
     useEffect(() => {
+        console.log(movie);
         const fetchMovieDetails = async () => {
         try {
             const response = await axios.get(
@@ -47,13 +48,13 @@ function MoviePreviewPage(){
     if(!movie){
         return <Navigate to="/main"/>
     }
-    console.log(movie);
+    console.log(movieData);
 
 
     if (loading) return <div className="text-center mt-5">Ładowanie danych filmu...</div>;
 
     if (!movieData)
-        return <div className="text-center mt-5">Nie udało się załadować danych filmu.</div>;
+        return <div className="text-center mt-5">Nie udało się załadować danych filmu.</div>;   
 
     
     return (

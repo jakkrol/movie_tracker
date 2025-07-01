@@ -1,5 +1,4 @@
-const { userLoginService } = require('../model/userModel');
-const { userRegisterService } = require('../model/userModel');
+const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist } = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -12,6 +11,7 @@ const handleResponse = (res, status, message, data=null) =>{
         data,
     });
 };
+
 
 module.exports.userLogin = async (req, res, next) =>{
     const { login, password } = req.body;
@@ -64,6 +64,30 @@ module.exports.userRegister = async (req, res, next) =>{
     }catch(err){
         if(err.code == '23505'){
             return handleResponse(res, 409, "Username exists");
+        }
+        next(err);
+    }
+};
+
+
+
+module.exports.addToWatchlist = async (req, res, next) =>{
+    const login = req.user;
+    const { movieId, JSONdata } = req.body;
+    if(!movieId) {
+        return handleResponse(res, 400, "No movie id sended");
+    }
+    try{
+        let movieExist = await checkIfMovieExist(movieId);
+
+        if(!movieExist){
+            await addMovie(movieId, JSONdata);
+        }
+        await addMovieToWatchlist(login, movieId);   
+        return handleResponse(res, 201, "Added to watchlist successfully");
+    }catch(err){
+        if(err.code == "23505"){
+            return handleResponse(res, 409, "Movie already exist in user watchlist");
         }
         next(err);
     }
