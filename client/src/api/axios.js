@@ -1,5 +1,7 @@
 import axios from 'axios';
 import SERVER_URL from './config';
+import { data } from 'react-router-dom';
+import LoginPage from '../pages/Login/LoginPage';
 
 const axiosInstance = axios.create({
   baseURL: SERVER_URL,
@@ -39,6 +41,28 @@ export const axiosLogin = async (data) =>{
         console.log(loggedUser);
         return loggedUser;
     }catch(err){
+        if(err.response) {
+            console.log(err.response.data.message);
+            alert(err.response.data.message);
+        }else{
+            console.log(err.message);
+        }
+    }
+    return null;
+}
+
+export const axiosAddToWatchlist = async (movie, currentUser) => { 
+    try{
+        const addToWatchlist = {movieId: movie.id, data: movie};
+        console.log(addToWatchlist);
+        const response = await axiosInstance.post('api/addMovie', addToWatchlist, {
+            headers: {
+                Authorization: `Bearer ${currentUser.token}`,
+            }
+        });
+        console.log(response.data);
+    }
+    catch(err){
         if(err.response) {
             console.log(err.response.data.message);
             alert(err.response.data.message);

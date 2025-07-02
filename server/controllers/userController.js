@@ -36,7 +36,7 @@ module.exports.userLogin = async (req, res, next) =>{
             )
             res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24*60*60*1000});
 
-            return handleResponse(res, 200, "Login success", {token: accessToken, user: { login: user.login } });
+            return handleResponse(res, 200, "Login success", {token: accessToken, user: user.login  });
         }else{
             return handleResponse(res, 401, "Wrong password");
         }
@@ -72,8 +72,10 @@ module.exports.userRegister = async (req, res, next) =>{
 
 
 module.exports.addToWatchlist = async (req, res, next) =>{
+    console.log("JESTEŚMY TUUU!!!!!");
     const login = req.user;
-    const { movieId, JSONdata } = req.body;
+    const { movieId, data } = req.body;
+    console.log(data);
     if(!movieId) {
         return handleResponse(res, 400, "No movie id sended");
     }
@@ -81,7 +83,7 @@ module.exports.addToWatchlist = async (req, res, next) =>{
         let movieExist = await checkIfMovieExist(movieId);
 
         if(!movieExist){
-            await addMovie(movieId, JSONdata);
+            await addMovie(movieId, data);
         }
         await addMovieToWatchlist(login, movieId);   
         return handleResponse(res, 201, "Added to watchlist successfully");

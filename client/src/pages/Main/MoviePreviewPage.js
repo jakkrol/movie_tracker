@@ -6,6 +6,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import fallback from '../../Img/missing_img.png';
 import styles from './MoviePreview.css';
 import Header from '../../Components/Header';
+import { axiosAddToWatchlist } from '../../api/axios';
 
 
 function MoviePreviewPage(){
@@ -15,6 +16,7 @@ function MoviePreviewPage(){
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const { user } = useAuth();
 
 
     useEffect(() => {
@@ -42,7 +44,11 @@ function MoviePreviewPage(){
         fetchMovieDetails();
     }, [movie.id]);
 
-
+    const handleAddToWatchlist = async () => {
+        console.log(user);
+        await axiosAddToWatchlist(movieData, user);
+        //alert("Film został dodany do Twojej watchlisty.");
+    }
 
 
     if(!movie){
@@ -74,6 +80,9 @@ function MoviePreviewPage(){
             {/* Main Info */}
             <div className="col-md-8 card_content movie-info">
                 <h2 className="card_title movie-title">{movieData.title}</h2>
+                <button className="btn btn-primary mb-3" onClick={handleAddToWatchlist}>
+                    Dodaj do Watchlisty
+                </button>
                 <p>
                     <strong>Data premiery:</strong> <span className="info-text">{movieData.release_date}</span>
                 </p>

@@ -19,6 +19,7 @@ const handleSubmit = async (e) =>{
     const responseData = await axiosLogin(data); 
     console.log(responseData);
         if (responseData) {
+            console.log(responseData);
             login(responseData); 
             navigate('/main');
         }
