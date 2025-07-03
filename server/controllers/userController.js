@@ -1,4 +1,4 @@
-const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist } = require('../model/userModel');
+const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist } = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -91,6 +91,23 @@ module.exports.addToWatchlist = async (req, res, next) =>{
         if(err.code == "23505"){
             return handleResponse(res, 409, "Movie already exist in user watchlist");
         }
+        next(err);
+    }
+};
+
+//GETING WATCHLIST - TO TEST
+module.exports.getWatchlist = async (req, res, next) => {
+    const login = req.user;
+    try {
+        const result = await userLoginService(login);
+        if (!result || result.length == 0) {
+            return handleResponse(res, 404, "User not found");
+        }
+        const userId = result.id;
+        //const watchlistResult = await pool.query("SELECT * FROM watchlist WHERE user_id = $1", [userId]);
+        const watchlist = await getWatchlist(userId);
+        return handleResponse(res, 200, "Watchlist retrieved successfully", watchlist);
+    } catch (err) {
         next(err);
     }
 };

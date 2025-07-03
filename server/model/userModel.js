@@ -25,4 +25,11 @@ module.exports.addMovieToWatchlist = async (login, movieId) => {
     
     const userId = userResult.rows[0].id;
     //await pool.query("INSERT INTO watchlist (user_id, movie_id) VALUES ($1, $2)", [login, movieId]);
+    await pool.query("INSERT INTO watchlist (user_id, movie_id, watched) VALUES ($1, $2, $3)", [userId, movieId, false]);
 }
+
+//GETING WATCHLIST - TO TEST
+module.exports.getWatchlist = async (user_id) => {
+    const result = await pool.query("select m.data from watchlist as w join movies as m on w.movie_id = m.movie_id where w.user_id = $1", [user_id]);
+    return result.rows;
+ }//select m.data from watchlist as w join movies as m on w.movie_id = m.movie_id where w.user_id = 4
