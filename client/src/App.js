@@ -7,6 +7,7 @@ import MainPage from './pages/Main/MainPage';
 import RequireAuth from './Contexts/RequireAuth';
 import RegisterPage from './pages/Login/RegisterPage';
 import MoviePreviewPage from './pages/Main/MoviePreviewPage';
+import WatchlistPage from './pages/Watchlist/WatchlistPage';
 
 
 function App() {
@@ -25,6 +26,11 @@ function App() {
                <Route path='/main/details' element={
               <RequireAuth>
                 <MoviePreviewPage/>
+              </RequireAuth>
+              } />
+            <Route path='/watchlist' element={
+              <RequireAuth>
+                <WatchlistPage/>
               </RequireAuth>
               } />
           </Routes>

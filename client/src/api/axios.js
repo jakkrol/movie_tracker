@@ -73,4 +73,20 @@ export const axiosAddToWatchlist = async (movie, currentUser) => {
     return null;
 }
 
+export const fetchWatchlist = async (currentUser) => {
+  try {
+    console.log("Fetching watchlist for user:", currentUser);
+    const response = await axiosInstance.get('/api/getWatchlist', {
+      headers: {
+        Authorization: `Bearer ${currentUser.token}`
+      }
+    });
+    return response.data.data; // albo response.data, zależnie co backend zwraca
+  } catch (error) {
+    console.error("Error fetching watchlist:", error);
+  }
+  return [];
+};
+
+
 export default axiosInstance;
