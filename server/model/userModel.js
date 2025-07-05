@@ -30,8 +30,37 @@ module.exports.addMovieToWatchlist = async (login, movieId) => {
 
 //GETING WATCHLIST - TO TEST
 module.exports.getWatchlist = async (user_id) => {
-    const result = await pool.query("SELECT m.data ->> 'title' AS title, m.data ->> 'release_date' AS release_date, m.data ->> 'poster_path' AS poster_path, m.data ->> 'vote_average' AS vote_average, m.data ->> 'overview' AS overview, cast_member ->> 'name' AS actor_name, cast_member ->> 'character' AS character_name, cast_member ->> 'profile_path' AS actor_profile FROM watchlist AS w JOIN movies AS m ON w.movie_id = m.movie_id, LATERAL jsonb_array_elements(m.data->'credits'->'cast') WITH ORDINALITY AS cast_member(cast_data, idx) WHERE w.user_id = $1 AND idx <= 10 ORDER BY m.movie_id, idx", [user_id]);
-    return result.rows;
- }//select m.data from watchlist as w join movies as m on w.movie_id = m.movie_id where w.user_id = 4
+  const result = await pool.query(`
+    SELECT 
+    w.watched AS watched,
+    m.movie_id,
+    m.data ->> 'title' AS title,
+    m.data ->> 'release_date' AS release_date,
+    m.data ->> 'poster_path' AS poster_path,
+    m.data ->> 'vote_average' AS vote_average,
+    m.data ->> 'overview' AS overview,
+    jsonb_agg(jsonb_build_object(
+        'name', cast_member.cast_data ->> 'name',
+        'character', cast_member.cast_data ->> 'character',
+        'profile_path', cast_member.cast_data ->> 'profile_path'
+    ) ORDER BY cast_member.idx) FILTER (WHERE cast_member.idx <= 10) AS top_cast
+    FROM 
+    watchlist AS w
+    JOIN 
+    movies AS m ON w.movie_id = m.movie_id
+    LEFT JOIN LATERAL 
+    jsonb_array_elements(m.data->'credits'->'cast') WITH ORDINALITY AS cast_member(cast_data, idx)
+    ON true
+    WHERE 
+    w.user_id = $1
+    GROUP BY 
+    w.watched, m.movie_id, m.data
+    ORDER BY 
+    m.movie_id;
+  `, [user_id]);
+
+  return result.rows;
+};
+//select m.data from watchlist as w join movies as m on w.movie_id = m.movie_id where w.user_id = 4
 //SELECT m.data ->> 'title' AS title, m.data ->> 'release_date' AS release_date, m.data ->> 'poster_path' AS poster_path, m.data ->> 'vote_average' AS vote_average, m.data ->> 'overview' AS overview, cast_member ->> 'name' AS actor_name, cast_member ->> 'character' AS character_name, cast_member ->> 'profile_path' AS actor_profile FROM watchlist AS w JOIN movies AS m ON w.movie_id = m.movie_id, LATERAL jsonb_array_elements(m.data->'credits'->'cast') WITH ORDINALITY AS cast_member(cast_data, idx) WHERE w.user_id = $1 AND idx <= 10 ORDER BY m.movie_id, idx;
 
