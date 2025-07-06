@@ -1,7 +1,5 @@
 import axios from 'axios';
 import SERVER_URL from './config';
-import { data } from 'react-router-dom';
-import LoginPage from '../pages/Login/LoginPage';
 
 const axiosInstance = axios.create({
   baseURL: SERVER_URL,
@@ -87,6 +85,25 @@ export const fetchWatchlist = async (currentUser) => {
   }
   return [];
 };
+
+export const axiosUpdateWatched = async (currentUser, updated) => {
+    console.log("Updating watched status for movies:", updated);
+    try {
+        const response = await axiosInstance.post('/api/updateWatched', { movies: updated }, {
+            headers: {
+                Authorization: `Bearer ${currentUser.token}`
+            }
+        });
+        console.log("Update response:", response);
+    }catch (err){
+        if(err.response) {
+            console.log(err.response.data.message);
+            alert(err.response.data.message);
+        }else{
+            console.log(err.message);
+        }
+    }
+}
 
 
 export default axiosInstance;

@@ -6,6 +6,7 @@ import fallback from '../../Img/missing_img.png';
 import styles from '../Main/Main.css';
 import { fetchWatchlist } from "../../api/axios";
 import { useAuth } from "../../Contexts/AuthContext";
+import { axiosUpdateWatched } from "../../api/axios";
 
 function WatchlistPage() {
   const navigate = useNavigate();
@@ -49,14 +50,11 @@ const handleFetchWatchlist = async () => {
   };
 
   const handleSaveChanges = async () => {
-    // try {
-    //   const updated = movies.filter((m) => modifiedMovies.includes(m.movie_id));
-    //   // Save these updated movies to DB
-    //   await axios.post("/api/watchlist/update-watched", { movies: updated });
-    //   setModifiedMovies([]);
-    // } catch (error) {
-    //   console.error("Failed to save changes:", error);
-    // }
+      const updated = movies.filter((m) => modifiedMovies.includes(m.movie_id));
+      // Save these updated movies to DB
+      await axiosUpdateWatched(user, updated);
+      //await axios.post("/api/watchlist/update-watched", { movies: updated });
+      setModifiedMovies([]);
   };
   ////////////////////////////
 

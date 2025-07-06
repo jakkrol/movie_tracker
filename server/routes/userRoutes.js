@@ -1,5 +1,5 @@
 const express = require('express');
-const { userLogin, userRegister, addToWatchlist, getWatchlist } = require('../controllers/userController');
+const { userLogin, userRegister, addToWatchlist, getWatchlist, updateWatchlist } = require('../controllers/userController');
 const verifyJWT = require('../middlewares/verifyJWT');
 
 const router = express.Router();
@@ -11,6 +11,8 @@ router.post('/register', userRegister);
 router.post('/addMovie', verifyJWT, addToWatchlist);
 
 router.get('/getWatchlist', verifyJWT, getWatchlist);
+
+router.post('/updateWatched', verifyJWT, updateWatchlist);
 
 // router.post('/api/login', (req, res) => {
 //   const { username, password } = req.body;

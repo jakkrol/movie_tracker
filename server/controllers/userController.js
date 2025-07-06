@@ -1,4 +1,4 @@
-const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist } = require('../model/userModel');
+const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist, updateWatchlist } = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -108,6 +108,29 @@ module.exports.getWatchlist = async (req, res, next) => {
         const watchlist = await getWatchlist(userId);
         return handleResponse(res, 200, "Watchlist retrieved successfully", watchlist);
     } catch (err) {
+        next(err);
+    }
+};
+
+
+module.exports.updateWatchlist = async (req, res, next) => {
+    console.log("TEST", req.body);
+    const login = req.user;
+    const { movies } = req.body;
+    console.log("MOVIES", movies);
+    if (!movies || movies.length === 0) {
+        return handleResponse(res, 400, "No movies provided for update");
+    }
+    try{
+        const result = await userLoginService(login);
+        if (!result || result.length == 0) {
+            return handleResponse(res, 404, "User not found");
+        }
+        const userId = result.id;
+
+        await updateWatchlist(userId, movies);
+        return handleResponse(res, 200, "Watchlist updated successfully");
+    }catch(err){
         next(err);
     }
 };

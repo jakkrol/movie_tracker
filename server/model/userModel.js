@@ -61,6 +61,8 @@ module.exports.getWatchlist = async (user_id) => {
 
   return result.rows;
 };
-//select m.data from watchlist as w join movies as m on w.movie_id = m.movie_id where w.user_id = 4
-//SELECT m.data ->> 'title' AS title, m.data ->> 'release_date' AS release_date, m.data ->> 'poster_path' AS poster_path, m.data ->> 'vote_average' AS vote_average, m.data ->> 'overview' AS overview, cast_member ->> 'name' AS actor_name, cast_member ->> 'character' AS character_name, cast_member ->> 'profile_path' AS actor_profile FROM watchlist AS w JOIN movies AS m ON w.movie_id = m.movie_id, LATERAL jsonb_array_elements(m.data->'credits'->'cast') WITH ORDINALITY AS cast_member(cast_data, idx) WHERE w.user_id = $1 AND idx <= 10 ORDER BY m.movie_id, idx;
 
+module.exports.updateWatchlist = async (user_id, movies) => {
+    console.log("Updating watchlist for user:", user_id, "with movies:", movies);
+    await pool.query('UPDATE watchlist SET watched = NOT watched WHERE user_id = $1 AND movie_id = ANY($2);', [user_id, movies.map(movie => movie.movie_id)]);
+}
