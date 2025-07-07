@@ -6,6 +6,29 @@ const axiosInstance = axios.create({
   withCredentials: true
 });
 
+const axiosRefresh = async (user, login) => {
+  //let { user, login } = useAuth();
+  try {
+    const response = await axiosInstance.get('/api/refresh', {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log("Otrzymano nowy access token:", response.data.accessToken);
+    user.token = response.data.accessToken; // Aktualizuj token użytkownika
+    login(user); // Zaktualizuj kontekst użytkownika
+    return response.data.accessToken;
+   }
+  catch (err) {
+    if (err.response) {
+      console.log(err.response.data.message);
+      alert(err.response.data.message);
+    } else {
+      console.log(err.message);
+    }
+  }
+}
+
 export const axiosRegister = async (data) =>{
     if(data.password === data.repeat_password){
       console.log("Very gucci")
@@ -49,7 +72,10 @@ export const axiosLogin = async (data) =>{
     return null;
 }
 
-export const axiosAddToWatchlist = async (movie, currentUser) => { 
+
+
+//////////////////////////////////////////////////////////////////////////////////PRIVATE API CALLS
+export const axiosAddToWatchlist = async (movie, currentUser, login) => { 
     try{
         const addToWatchlist = {movieId: movie.id, data: movie};
         console.log(addToWatchlist);
@@ -71,7 +97,8 @@ export const axiosAddToWatchlist = async (movie, currentUser) => {
     return null;
 }
 
-export const fetchWatchlist = async (currentUser) => {
+/////////////////////////TESTY JĄDROWE
+export const fetchWatchlist = async (currentUser, login) => {
   try {
     console.log("Fetching watchlist for user:", currentUser);
     const response = await axiosInstance.get('/api/getWatchlist', {
@@ -79,14 +106,23 @@ export const fetchWatchlist = async (currentUser) => {
         Authorization: `Bearer ${currentUser.token}`
       }
     });
-    return response.data.data; // albo response.data, zależnie co backend zwraca
+    return response.data.data;
   } catch (error) {
+    if (error.response && error.response.status === 403) {
+      // Token wygasł, próbujemy odświeżyć
+      const newAccessToken = await axiosRefresh(currentUser, login);
+      if (newAccessToken) {
+        // Wywołujemy fetch ponownie z nowym tokenem
+        return fetchWatchlist({ ...currentUser, token: newAccessToken }, login);
+      }
+    }
     console.error("Error fetching watchlist:", error);
   }
   return [];
 };
 
-export const axiosUpdateWatched = async (currentUser, updated) => {
+
+export const axiosUpdateWatched = async (currentUser, updated, login) => {
     console.log("Updating watched status for movies:", updated);
     try {
         const response = await axiosInstance.post('/api/updateWatched', { movies: updated }, {

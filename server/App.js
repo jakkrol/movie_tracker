@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const pool = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const errorHandling = require('./middlewares/errorHandler')
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use("/api", userRoutes);
 

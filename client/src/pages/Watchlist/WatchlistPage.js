@@ -13,11 +13,11 @@ function WatchlistPage() {
   const [movies, setMovies] = useState([]);
   const [modifiedMovies, setModifiedMovies] = useState([]);
 
-  const { user } = useAuth();
+  const { user, login } = useAuth();
 
 const handleFetchWatchlist = async () => {
     try {
-      const response = await fetchWatchlist(user);
+      const response = await fetchWatchlist(user, login);
       console.log("Fetched watchlist:", response);
       setMovies(response);
     } catch (error) {
@@ -52,7 +52,7 @@ const handleFetchWatchlist = async () => {
   const handleSaveChanges = async () => {
       const updated = movies.filter((m) => modifiedMovies.includes(m.movie_id));
       // Save these updated movies to DB
-      await axiosUpdateWatched(user, updated);
+      await axiosUpdateWatched(user, updated, login);
       //await axios.post("/api/watchlist/update-watched", { movies: updated });
       setModifiedMovies([]);
   };

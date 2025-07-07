@@ -16,7 +16,7 @@ function MoviePreviewPage(){
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const { user } = useAuth();
+    const { user, login } = useAuth();
 
 
     useEffect(() => {
@@ -46,7 +46,7 @@ function MoviePreviewPage(){
 
     const handleAddToWatchlist = async () => {
         console.log(user);
-        await axiosAddToWatchlist(movieData, user);
+        await axiosAddToWatchlist(movieData, user, login);
         //alert("Film został dodany do Twojej watchlisty.");
     }
 

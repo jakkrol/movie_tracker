@@ -26,7 +26,7 @@ module.exports.userLogin = async (req, res, next) =>{
             const accessToken = jwt.sign(
                 { "login": user.login },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '15m' }
+                { expiresIn: '30s' }
             )
 
             const refreshToken = jwt.sign(
