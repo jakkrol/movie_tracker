@@ -86,14 +86,17 @@ export const axiosAddToWatchlist = async (movie, currentUser, login) => {
         });
         console.log(response.data);
     }
-    catch(err){
-        if(err.response) {
-            console.log(err.response.data.message);
-            alert(err.response.data.message);
-        }else{
-            console.log(err.message);
-        }
+    catch (error) {
+    if (error.response && error.response.status === 403) {
+      // Odświeżanie tokenu
+      const newAccessToken = await axiosRefresh(currentUser, login);
+      if (newAccessToken) {
+        // Ponowne wywołanie z nowym tokenem
+        return axiosAddToWatchlist({ ...currentUser, token: newAccessToken }, login);
+      }
     }
+    console.error("Error fetching watchlist:", error);
+  }
     return null;
 }
 
@@ -109,16 +112,16 @@ export const fetchWatchlist = async (currentUser, login) => {
     return response.data.data;
   } catch (error) {
     if (error.response && error.response.status === 403) {
-      // Token wygasł, próbujemy odświeżyć
+      // Odświeżanie tokenu
       const newAccessToken = await axiosRefresh(currentUser, login);
       if (newAccessToken) {
-        // Wywołujemy fetch ponownie z nowym tokenem
+        // Ponowne wywołanie z nowym tokenem
         return fetchWatchlist({ ...currentUser, token: newAccessToken }, login);
       }
     }
     console.error("Error fetching watchlist:", error);
   }
-  return [];
+  return null;
 };
 
 
@@ -131,14 +134,18 @@ export const axiosUpdateWatched = async (currentUser, updated, login) => {
             }
         });
         console.log("Update response:", response);
-    }catch (err){
-        if(err.response) {
-            console.log(err.response.data.message);
-            alert(err.response.data.message);
-        }else{
-            console.log(err.message);
-        }
+    }catch (error) {
+    if (error.response && error.response.status === 403) {
+      // Odświeżanie tokenu
+      const newAccessToken = await axiosRefresh(currentUser, login);
+      if (newAccessToken) {
+        // Ponowne wywołanie z nowym tokenem
+        return axiosUpdateWatched({ ...currentUser, token: newAccessToken }, login);
+      }
     }
+    console.error("Error fetching watchlist:", error);
+  }
+    return null;
 }
 
 
