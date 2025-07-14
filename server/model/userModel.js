@@ -63,6 +63,12 @@ module.exports.getWatchlist = async (user_id) => {
 };
 
 module.exports.updateWatchlist = async (user_id, movies) => {
-    console.log("Updating watchlist for user:", user_id, "with movies:", movies);
+    //console.log("Updating watchlist for user:", user_id, "with movies:", movies);
     await pool.query('UPDATE watchlist SET watched = NOT watched WHERE user_id = $1 AND movie_id = ANY($2);', [user_id, movies.map(movie => movie.movie_id)]);
 }
+
+module.exports.deleteMoveFromWatchlist = async (user_id, movie_id) => {
+    await pool.query('DELETE FROM watchlist WHERE user_id = $1 AND movie_id = $2;', [user_id, movie_id]);
+}
+
+

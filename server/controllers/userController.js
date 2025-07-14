@@ -1,4 +1,4 @@
-const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist, updateWatchlist } = require('../model/userModel');
+const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist, updateWatchlist, deleteMoveFromWatchlist } = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -134,3 +134,26 @@ module.exports.updateWatchlist = async (req, res, next) => {
         next(err);
     }
 };
+
+module.exports.deleteMovieWatchlist = async (req, res, next) => {
+    console.log("DELETE MOVIE WATCHLIST", req.body);
+    const login = req.user;
+    const { movieId } = req.body;
+    console.log("MOVIE ID", movieId);
+    if (!movieId) {
+        return handleResponse(res, 400, "No movie id provided for deletion");
+    }
+
+    try {
+        const result = await userLoginService(login);
+        if(!result || result.length == 0) {
+            return handleResponse(res, 404, "User not found");
+        }
+        const userId = result.id;
+        //add delete logic here :)
+        await deleteMoveFromWatchlist(userId, movieId);
+        return handleResponse(res, 200, "Movie deleted from watchlist successfully");
+    }catch(err) {
+        next(err);
+    }
+}

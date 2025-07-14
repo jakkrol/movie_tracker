@@ -1,5 +1,5 @@
 const express = require('express');
-const { userLogin, userRegister, addToWatchlist, getWatchlist, updateWatchlist } = require('../controllers/userController');
+const { userLogin, userRegister, addToWatchlist, getWatchlist, updateWatchlist, deleteMovieWatchlist } = require('../controllers/userController');
 const { handleRefreshToken } = require('../controllers/refreshTokenController');
 const verifyJWT = require('../middlewares/verifyJWT');
 
@@ -15,7 +15,10 @@ router.get('/getWatchlist', verifyJWT, getWatchlist);
 
 router.post('/updateWatched', verifyJWT, updateWatchlist);
 
+router.post('/deleteMovieWatchlist', verifyJWT, deleteMovieWatchlist);
+
 router.get('/refresh', handleRefreshToken);
+
 
 router.get('/testRefresh', (req, res) => {
   console.log("Test działa");

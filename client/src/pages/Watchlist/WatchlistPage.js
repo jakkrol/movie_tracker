@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Header from '../../Components/Header';
 import fallback from '../../Img/missing_img.png';
 import styles from '../Main/Main.css';
-import { fetchWatchlist } from "../../api/axios";
+import { fetchWatchlist, axiosUpdateWatched, axiosDeleteMovie } from "../../api/axios";
 import { useAuth } from "../../Contexts/AuthContext";
-import { axiosUpdateWatched } from "../../api/axios";
 
 function WatchlistPage() {
   const navigate = useNavigate();
@@ -58,6 +57,13 @@ const handleFetchWatchlist = async () => {
   };
   ////////////////////////////
 
+  const handleMovieDelete = async (movie) => {
+      if(await axiosDeleteMovie(user, movie, login)) {
+        setMovies((prevMovies) =>
+          prevMovies.filter((m) => m.movie_id !== movie.movie_id)
+        );
+      }
+  }
 
  return (
     <div className="wrapper">
@@ -82,14 +88,7 @@ const handleFetchWatchlist = async () => {
               >
                 <div className="card" tabIndex="0">
                   <div className="card_image">
-                    <img
-                      src={
-                        movie.poster_path
-                          ? `https://image.tmdb.org/t/p/original/${movie.poster_path}`
-                          : fallback
-                      }
-                      alt={`${movie.title} poster`}
-                    />
+                    <img src={ movie.poster_path ? `https://image.tmdb.org/t/p/original/${movie.poster_path}` : fallback } alt={`${movie.title} poster`} />
                   </div>
                   <div className="card_content">
                     <h2 className="card_title">{movie.title}</h2>
@@ -115,6 +114,17 @@ const handleFetchWatchlist = async () => {
                       </button>
                     </div>
 
+                    {/* Delete from watchlist button */}
+                    <div className="delete_button" style={{ marginTop: "10px" }}>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleMovieDelete(movie)}
+                      >
+                        Remove from Watchlist
+                      </button>
+                    </div>
+
+                    {/* Full description link */}
                     <div className="full_description">
                       <p onClick={() => handleMovieClick(movie)}>Check full site</p>
                     </div>
