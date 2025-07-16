@@ -30,7 +30,8 @@ const handleFetchWatchlist = async () => {
   }, []);
 
   const handleMovieClick = (movie) => {
-    navigate("/details", { state: { e: movie } });
+    console.log(movie);
+    navigate("details", { state: { e: movie } }); 
   };
 
   ////////////////////////////

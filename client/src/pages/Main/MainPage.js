@@ -59,6 +59,7 @@ try{
 
 
   const handleMovieClick = (e) => {
+    console.log(e);
     setSelectedMovie(e);
     navigate("details", {state: {e}});
   }

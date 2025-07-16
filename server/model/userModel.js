@@ -35,6 +35,7 @@ module.exports.getWatchlist = async (user_id) => {
     w.watched AS watched,
     m.movie_id,
     m.data ->> 'title' AS title,
+    m.data ->> 'genres' AS genres,
     m.data ->> 'release_date' AS release_date,
     m.data ->> 'poster_path' AS poster_path,
     m.data ->> 'vote_average' AS vote_average,
