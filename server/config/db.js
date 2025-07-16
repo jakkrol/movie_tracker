@@ -6,6 +6,7 @@ dotenv.config();
 const config = {};
 
 if (process.env.DATABASE_URL) {
+  console.log("DATABASE_URL:", process.env.DATABASE_URL);
   config.connectionString = process.env.DATABASE_URL;
   config.ssl = {
     rejectUnauthorized: false, // needed for Supabase or any SSL DB with self-signed cert
