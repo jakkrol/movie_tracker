@@ -44,9 +44,30 @@ function MoviePreviewPage(){
         fetchMovieDetails();
     }, [movie.id]);
 
+    function getSlimMovieData(movie) {
+        return {
+            id: movie.id,
+            title: movie.title,
+            release_date: movie.release_date,
+            poster_path: movie.poster_path,
+            vote_average: movie.vote_average,
+            overview: movie.overview,
+            // slice cast to only first 10 with needed fields if available
+            credits: {
+            cast: movie.credits?.cast
+                ?.slice(0, 10)
+                .map(c => ({
+                name: c.name,
+                character: c.character,
+                profile_path: c.profile_path,
+                })) || [],
+            },
+        };
+    }
     const handleAddToWatchlist = async () => {
         console.log(user);
-        await axiosAddToWatchlist(movieData, user, login);
+        let movie = getSlimMovieData(movieData);
+        await axiosAddToWatchlist(movie, user, login);
         //alert("Film został dodany do Twojej watchlisty.");
     }
 
