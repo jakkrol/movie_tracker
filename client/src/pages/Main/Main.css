@@ -23,6 +23,7 @@
 
 .main{
   flex: 1;
+  padding-bottom: 80px; /* add enough space to clear the nav */
 }
 
 .wrapper {

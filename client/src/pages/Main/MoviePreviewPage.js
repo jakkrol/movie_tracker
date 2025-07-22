@@ -65,10 +65,15 @@ function MoviePreviewPage(){
         };
     }
     const handleAddToWatchlist = async () => {
-        console.log(user);
-        let movie = getSlimMovieData(movieData);
-        await axiosAddToWatchlist(movie, user, login);
-        //alert("Film został dodany do Twojej watchlisty.");
+        try{
+            console.log(user);
+            let movie = getSlimMovieData(movieData);
+            await axiosAddToWatchlist(movie, user, login);
+            alert("Film został dodany do Twojej watchlisty.");
+        }catch (error) {
+            console.error("Error adding movie to watchlist:", error);
+            alert("Wystąpił błąd podczas dodawania filmu do watchlisty.");
+        }
     }
 
 
