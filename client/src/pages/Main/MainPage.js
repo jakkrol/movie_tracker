@@ -183,7 +183,31 @@ return (
     </div>
 
     {/* Movie Cards Grid */}
-    <div className="container-fluid main">
+<div className="movies-container">
+  {movies.map(movie => (
+    <div
+      key={movie.id}
+      className="movie-card"
+      onClick={() => handleMovieClick(movie)}
+    >
+      <img className=""
+        src={
+          movie.poster_path
+            ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+            : fallback
+        }
+        alt={`${movie.title} poster`}
+      />
+      <h3>{movie.title}</h3>
+      <p>{movie.release_date}</p>
+    </div>
+  ))}
+</div>
+
+
+
+
+    {/* <div className="container-fluid main">
       <div className="row g-4 px-3">
         {movies.map((movie) => (
           <div key={movie.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -221,7 +245,7 @@ return (
           </div>
         ))}
       </div>
-    </div>
+    </div> */}
 
     {/* Pagination Controls */}
     <div className="navigation mt-4">

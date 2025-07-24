@@ -56,13 +56,13 @@ function MoviePreviewPage(){
                 <p>
                     <strong>Data premiery:</strong> <span className="info-text">{movieData.release_date}</span>
                 </p>
-                <p>
+                {/* <p>
                     <strong>Gatunki:</strong>{" "}
                     <span className="info-text">{Array.isArray(movieData.genres)
                         ? movieData.genres.map((g) => g.name).join(", ")
                         : JSON.parse(movieData.genres).map((g) => g.name).join(", ")
                     }</span>
-                </p>
+                </p> */}
                 <p>
                     <strong>Ocena:</strong>{" "}
                     <span className="info-text">
@@ -75,10 +75,10 @@ function MoviePreviewPage(){
         </div>
 
         {/* Cast */}
-        {/* <div className="mt-5 cast-section">
+        <div className="mt-5 cast-section">
             <h3 className="section-heading">Obsada</h3>
             <div className="row">
-                {movieData.credits.cast.slice(0, 10).map((actor) => (
+                {movieData.top_cast.slice(0, 10).map((actor) => (
                 <div key={actor.cast_id} className="col-6 col-md-3 mb-3 p-2"> 
                     <div className="cast-member">
                         <img
@@ -94,7 +94,7 @@ function MoviePreviewPage(){
                 </div>
             ))}
             </div>
-        </div> */}
+        </div>
 
         {/* Keywords */}
         {/* {movieData.keywords.keywords.length > 0 && (

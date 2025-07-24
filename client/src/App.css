@@ -1,3 +1,14 @@
+:root {
+  --background: #121212;
+  --card-bg: #1e1e1e;
+  --primary: #e50914;
+  --secondary: #b81d24;
+  --text: #f5f5f5;
+  --muted: #999;
+  --accent: #ff3b6c;
+  --shadow: #b81d24;
+}
+
 *{
   margin: 0;
   padding: 0;
@@ -7,7 +18,7 @@
 
 .App{
   color: white;
-  background-color: rgb(33, 29, 29);
+  background-color: var(--background);
   min-height: 100vh;
   overflow-x: auto;
 }
