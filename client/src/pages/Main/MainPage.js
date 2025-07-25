@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from "react";
+import react, { useState, useEffect, use } from "react";
 import { useAuth } from "../../Contexts/AuthContext";
 import axios from 'axios';
 import { Navigate, Route, useNavigate } from "react-router-dom";
@@ -18,6 +18,7 @@ const [pageNumber, setPageNumber] = useState('');
 const [selectedGenre, setSelectedGenre] = useState('');
 const [movieTitle, setMovieTitle] = useState('');
 const [movies, setMovies] = useState([]);
+const [popularMovies, setPopularMovies] = useState([]);
 const [selectedMovie, setSelectedMovie] = useState(null);
 
 const searchByQuery = async () => {
@@ -34,29 +35,48 @@ try{
     });
 
     setMovies(res.data.results);
-    console.log(res.data.results);
+    console.log("TEST QUERY" + res.data.results);
   } catch (error) {
     console.error('Error while fetching by query: ', error);
   }
 };
 
-  const searchByGenre = async () => {
-  try {
-    const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+const searchPopularMovies = async () => {
+  try{
+    const path = `https://api.themoviedb.org/3/movie/popular`;
+
+    const res = await axios.get(path, {
       params: {
         api_key: API_KEY,
-        with_genres: selectedGenre,
         page: pageNumber,
         language: 'pl-PL'
       }
     });
 
-    setMovies(response.data.results);
-    console.log(response.data.results); 
-  } catch (error) {
-    console.error('Error while fetching movies by genre:', error);
+    setPopularMovies(res.data.results);
+    console.log("TEST POPULAR" + res.data.results);
+  }catch (error) {
+    console.error('Error while fetching by query: ', error);
   }
 };
+
+//   const searchByGenre = async () => {
+//   try {
+//     const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+//       params: {
+//         api_key: API_KEY,
+//         with_genres: selectedGenre,
+//         page: pageNumber,
+//         language: 'pl-PL'
+//       }
+//     });
+
+//     setMovies(response.data.results);
+//     console.log(response.data.results); 
+//   } catch (error) {
+//     console.error('Error while fetching movies by genre:', error);
+//   }
+// };
 
 
   const handleMovieClick = (e) => {
@@ -82,22 +102,44 @@ try{
     const storedSearchMode = localStorage.getItem('mode');
     const storedMovieTitle = localStorage.getItem('title');
     const storedPageNumber = localStorage.getItem('page');
+    const storedPopularMovies = sessionStorage.getItem('popularMovies');
 
     if(storedMovies) setSelectedMovie(storedMovies);
     if(storedPageNumber) setPageNumber(storedPageNumber);
     if(storedSelectedGenre) setSelectedGenre(storedSelectedGenre);
     if(storedMovieTitle) setMovieTitle(storedMovieTitle);
     if(storedSearchMode) setSearchMode(storedSearchMode);
-  },[])
-  useEffect(()=> {
-    if(searchMode == 'genre'){
-    searchByGenre();
+   
+    if (storedPopularMovies) {
+  try {
+    const parsed = JSON.parse(storedPopularMovies);
+    if (Array.isArray(parsed)) {
+      setPopularMovies(parsed);
+    } else {
+      console.warn("popularMovies z sessionStorage nie jest tablicą");
+      searchPopularMovies();
     }
+  } catch (error) {
+    console.error("Błąd przy parsowaniu popularMovies z sessionStorage:", error);
+    searchPopularMovies();
+  }
+} else {
+  searchPopularMovies();
+}
+  },[])
+
+
+  useEffect(()=> {
+    // if(searchMode == 'genre'){
+    // searchByGenre();
+    // }
     if(searchMode == 'query'){
       searchByQuery();
+      //searchPopularMovies();
     }
     localStorage.setItem('page', pageNumber);
   },[pageNumber]);
+
 
   useEffect(()=>{
     localStorage.setItem('mode', searchMode);
@@ -111,6 +153,9 @@ try{
     useEffect(()=>{
     localStorage.setItem('title', movieTitle)
   }, [movieTitle]);
+    useEffect(()=>{
+    sessionStorage.setItem('popularMovies', popularMovies)
+  }, [popularMovies]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -124,7 +169,7 @@ return (
     {/* Filter & Search Controls */}
     <div className="container mt-4 mb-3">
       <div className="row justify-content-center align-items-center g-3">
-        <div className="col-12 col-md-4 d-flex justify-content-center justify-content-md-start">
+        {/* <div className="col-12 col-md-4 d-flex justify-content-center justify-content-md-start">
           <select
             className="searchers"
             value={selectedGenre}
@@ -156,7 +201,7 @@ return (
             <option value="10752">War</option>
             <option value="37">Western</option>
           </select>
-        </div>
+        </div> */}
 
         <div className="col-12 col-md-6 d-flex justify-content-center">
           <input
@@ -185,6 +230,27 @@ return (
     {/* Movie Cards Grid */}
 <div className="movies-container">
   {movies.map(movie => (
+    <div
+      key={movie.id}
+      className="movie-card"
+      onClick={() => handleMovieClick(movie)}
+    >
+      <img className=""
+        src={
+          movie.poster_path
+            ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+            : fallback
+        }
+        alt={`${movie.title} poster`}
+      />
+      <h3>{movie.title}</h3>
+      <p>{movie.release_date}</p>
+    </div>
+  ))}
+</div>
+
+<div className="movies-container">
+  {popularMovies.map(movie => (
     <div
       key={movie.id}
       className="movie-card"
