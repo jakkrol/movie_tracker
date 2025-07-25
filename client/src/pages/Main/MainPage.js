@@ -14,11 +14,12 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 const navigate = useNavigate();
 
 const [searchMode, setSearchMode] = useState('');
-const [pageNumber, setPageNumber] = useState('');
+const [pageNumber, setPageNumber] = useState(1);
 const [selectedGenre, setSelectedGenre] = useState('');
 const [movieTitle, setMovieTitle] = useState('');
 const [movies, setMovies] = useState([]);
 const [popularMovies, setPopularMovies] = useState([]);
+const [cinemaMovies, setCinemaMovies] = useState([]);
 const [selectedMovie, setSelectedMovie] = useState(null);
 
 const searchByQuery = async () => {
@@ -60,6 +61,24 @@ const searchPopularMovies = async () => {
   }
 };
 
+const searchCinemaMovies = async () => {
+  try{
+    const path = `https://api.themoviedb.org/3/movie/now_playing`;
+
+    const res = await axios.get(path, {
+      params: {
+        api_key: API_KEY,
+        page: pageNumber,
+        language: 'pl-PL'
+      }
+    });
+
+    setCinemaMovies(res.data.results);
+  }catch (error) {
+    console.error('Error while fetching cinema movies: ', error);
+  }
+}
+
 //   const searchByGenre = async () => {
 //   try {
 //     const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
@@ -97,12 +116,14 @@ const searchPopularMovies = async () => {
     console.log("PAGE NUMBER:---->" + pageNumber)
   }
   useEffect(()=>{
+    console.log("GIGA LIPA");
     const storedMovies = localStorage.getItem('movieList');
     const storedSelectedGenre = localStorage.getItem('genre');
     const storedSearchMode = localStorage.getItem('mode');
     const storedMovieTitle = localStorage.getItem('title');
     const storedPageNumber = localStorage.getItem('page');
     const storedPopularMovies = sessionStorage.getItem('popularMovies');
+    const storedCinemaMovies = sessionStorage.getItem('cinemaMovies');
 
     if(storedMovies) setSelectedMovie(storedMovies);
     if(storedPageNumber) setPageNumber(storedPageNumber);
@@ -125,6 +146,23 @@ const searchPopularMovies = async () => {
   }
 } else {
   searchPopularMovies();
+}
+
+    if (storedCinemaMovies) {
+  try {
+    const parsed = JSON.parse(storedCinemaMovies);
+    if (Array.isArray(parsed)) {
+      setCinemaMovies(parsed);
+    } else {
+      console.warn("CinemaMovies z sessionStorage nie jest tablicą");
+      searchCinemaMovies();
+    }
+  } catch (error) {
+    console.error("Błąd przy parsowaniu CinemaMovies z sessionStorage:", error);
+    searchCinemaMovies();
+  }
+} else {
+  searchCinemaMovies();
 }
   },[])
 
@@ -156,6 +194,9 @@ const searchPopularMovies = async () => {
     useEffect(()=>{
     sessionStorage.setItem('popularMovies', popularMovies)
   }, [popularMovies]);
+    useEffect(()=>{
+    sessionStorage.setItem('cinemaMovies', cinemaMovies)
+  }, [cinemaMovies]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -248,7 +289,7 @@ return (
     </div>
   ))}
 </div>
-
+<h2>Popular Movies</h2>
 <div className="movies-container">
   {popularMovies.map(movie => (
     <div
@@ -270,7 +311,27 @@ return (
   ))}
 </div>
 
-
+<h2>Cinema Movies</h2>
+<div className="movies-container">
+  {cinemaMovies.map(movie => (
+    <div
+      key={movie.id}
+      className="movie-card"
+      onClick={() => handleMovieClick(movie)}
+    >
+      <img className=""
+        src={
+          movie.poster_path
+            ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+            : fallback
+        }
+        alt={`${movie.title} poster`}
+      />
+      <h3>{movie.title}</h3>
+      <p>{movie.release_date}</p>
+    </div>
+  ))}
+</div>
 
 
     {/* <div className="container-fluid main">
