@@ -20,6 +20,7 @@ const [movieTitle, setMovieTitle] = useState('');
 const [movies, setMovies] = useState([]);
 const [popularMovies, setPopularMovies] = useState([]);
 const [cinemaMovies, setCinemaMovies] = useState([]);
+const [TopRatedMovies, setTopRatedMovies] = useState([]);
 const [selectedMovie, setSelectedMovie] = useState(null);
 
 const searchByQuery = async () => {
@@ -79,6 +80,24 @@ const searchCinemaMovies = async () => {
   }
 }
 
+const searchTopRatedMovies = async () => {
+  try{
+    const path = `https://api.themoviedb.org/3/movie/top_rated`;
+
+    const res = await axios.get(path, {
+      params: {
+        api_key: API_KEY,
+        page: pageNumber,
+        language: 'pl-PL'
+      }
+    });
+
+    setTopRatedMovies(res.data.results);
+  }catch (error) {
+    console.error('Error while fetching cinema movies: ', error);
+  }
+}
+
 //   const searchByGenre = async () => {
 //   try {
 //     const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
@@ -124,6 +143,7 @@ const searchCinemaMovies = async () => {
     const storedPageNumber = localStorage.getItem('page');
     const storedPopularMovies = sessionStorage.getItem('popularMovies');
     const storedCinemaMovies = sessionStorage.getItem('cinemaMovies');
+    const storedTopRatedMovies = sessionStorage.getItem('topRatedMovies');
 
     if(storedMovies) setSelectedMovie(storedMovies);
     if(storedPageNumber) setPageNumber(storedPageNumber);
@@ -164,6 +184,24 @@ const searchCinemaMovies = async () => {
 } else {
   searchCinemaMovies();
 }
+
+    if (storedTopRatedMovies) {
+  try {
+    const parsed = JSON.parse(storedTopRatedMovies);
+    if (Array.isArray(parsed)) {
+      setTopRatedMovies(parsed);
+    } else {
+      console.warn("popularMovies z sessionStorage nie jest tablicą");
+      searchTopRatedMovies();
+    }
+  } catch (error) {
+    console.error("Błąd przy parsowaniu popularMovies z sessionStorage:", error);
+    searchTopRatedMovies();
+  }
+} else {
+  searchTopRatedMovies();
+}
+
   },[])
 
 
@@ -172,8 +210,10 @@ const searchCinemaMovies = async () => {
     // searchByGenre();
     // }
     if(searchMode == 'query'){
-      searchByQuery();
-      //searchPopularMovies();
+      //searchByQuery();
+      searchPopularMovies();
+      searchCinemaMovies();
+      searchTopRatedMovies();
     }
     localStorage.setItem('page', pageNumber);
   },[pageNumber]);
@@ -197,6 +237,9 @@ const searchCinemaMovies = async () => {
     useEffect(()=>{
     sessionStorage.setItem('cinemaMovies', cinemaMovies)
   }, [cinemaMovies]);
+    useEffect(()=>{
+      sessionStorage.setItem('topRatedMovies', TopRatedMovies);
+    })
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -244,7 +287,7 @@ return (
           </select>
         </div> */}
 
-        <div className="col-12 col-md-6 d-flex justify-content-center">
+        <div className="col-12 col-md-6 d-flex justify-content-center searcherBox">
           <input
             className="searchers"
             type="text"
@@ -268,70 +311,101 @@ return (
       </div>
     </div>
 
+    <div className="">
     {/* Movie Cards Grid */}
-<div className="movies-container">
-  {movies.map(movie => (
-    <div
-      key={movie.id}
-      className="movie-card"
-      onClick={() => handleMovieClick(movie)}
-    >
-      <img className=""
-        src={
-          movie.poster_path
-            ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
-            : fallback
-        }
-        alt={`${movie.title} poster`}
-      />
-      <h3>{movie.title}</h3>
-      <p>{movie.release_date}</p>
+      <div className="movies-container ">
+        {movies.map(movie => (
+          <div
+            key={movie.id}
+            className="movie-card"
+            onClick={() => handleMovieClick(movie)}
+          >
+            <img className=""
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+                  : fallback
+              }
+              alt={`${movie.title} poster`}
+            />
+            <h3>{movie.title}</h3>
+            <p>{movie.release_date}</p>
+          </div>
+        ))}
+      </div>
+    <div className="popularContainer">
+      <h2>Popular Movies</h2>
+      <div className="movies-container">
+        {popularMovies.map(movie => (
+          <div
+            key={movie.id}
+            className="movie-card"
+            onClick={() => handleMovieClick(movie)}
+          >
+            <img className=""
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+                  : fallback
+              }
+              alt={`${movie.title} poster`}
+            />
+            <h3>{movie.title}</h3>
+            <p>{movie.release_date}</p>
+          </div>
+        ))}
+      </div>
     </div>
-  ))}
-</div>
-<h2>Popular Movies</h2>
-<div className="movies-container">
-  {popularMovies.map(movie => (
-    <div
-      key={movie.id}
-      className="movie-card"
-      onClick={() => handleMovieClick(movie)}
-    >
-      <img className=""
-        src={
-          movie.poster_path
-            ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
-            : fallback
-        }
-        alt={`${movie.title} poster`}
-      />
-      <h3>{movie.title}</h3>
-      <p>{movie.release_date}</p>
-    </div>
-  ))}
-</div>
 
-<h2>Cinema Movies</h2>
-<div className="movies-container">
-  {cinemaMovies.map(movie => (
-    <div
-      key={movie.id}
-      className="movie-card"
-      onClick={() => handleMovieClick(movie)}
-    >
-      <img className=""
-        src={
-          movie.poster_path
-            ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
-            : fallback
-        }
-        alt={`${movie.title} poster`}
-      />
-      <h3>{movie.title}</h3>
-      <p>{movie.release_date}</p>
+    <div className="cinemaContainer">
+      <h2>Cinema Movies</h2>
+      <div className="movies-container">
+        {cinemaMovies.map(movie => (
+          <div
+            key={movie.id}
+            className="movie-card"
+            onClick={() => handleMovieClick(movie)}
+          >
+            <img className=""
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+                  : fallback
+              }
+              alt={`${movie.title} poster`}
+            />
+            <h3>{movie.title}</h3>
+            <p>{movie.release_date}</p>
+          </div>
+        ))}
+      </div>
     </div>
-  ))}
-</div>
+
+  <div className="topRatedContainer">
+      <h2>Top Rated Movies</h2>
+      <div className="movies-container">
+        {TopRatedMovies.map(movie => (
+          <div
+            key={movie.id}
+            className="movie-card"
+            onClick={() => handleMovieClick(movie)}
+          >
+            <img className=""
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+                  : fallback
+              }
+              alt={`${movie.title} poster`}
+            />
+            <h3>{movie.title}</h3>
+            <p>{movie.release_date}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    </div>
 
 
     {/* <div className="container-fluid main">
@@ -374,8 +448,10 @@ return (
       </div>
     </div> */}
 
+
+
     {/* Pagination Controls */}
-    <div className="navigation mt-4">
+    {/* <div className="navigation mt-4">
       <button
         className="button-87"
         role="button"
@@ -391,7 +467,7 @@ return (
       >
         Next
       </button>
-    </div>
+    </div> */}
   </div>
 );
 }
