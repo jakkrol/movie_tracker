@@ -72,4 +72,11 @@ module.exports.deleteMoveFromWatchlist = async (user_id, movie_id) => {
     await pool.query('DELETE FROM watchlist WHERE user_id = $1 AND movie_id = $2;', [user_id, movie_id]);
 }
 
+module.exports.addReviewDb = async (movie_id, user_id, review) => {
+    await pool.query('INSERT INTO reviews (movie_id, user_id, review) VALUES ($1, $2, $3);', [movie_id, user_id, review]);
+}
 
+module.exports.getReviewsForMovie = async (movie_id) => {
+    const result = await pool.query('SELECT * FROM reviews WHERE movie_id = $1;', [movie_id]);
+    return result.rows;
+}

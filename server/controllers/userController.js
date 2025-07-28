@@ -1,4 +1,4 @@
-const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist, updateWatchlist, deleteMoveFromWatchlist } = require('../model/userModel');
+const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist, updateWatchlist, deleteMoveFromWatchlist, addReviewDb, getReviewsForMovie } = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -154,6 +154,51 @@ module.exports.deleteMovieWatchlist = async (req, res, next) => {
         await deleteMoveFromWatchlist(userId, movieId);
         return handleResponse(res, 200, "Movie deleted from watchlist successfully");
     }catch(err) {
+        next(err);
+    }
+}
+
+
+module.exports.addReview = async (req, res, next) => {
+    const login = req.user;
+    const { movieId, review } = req.body;
+
+    if(!movieId || !review) {
+        return handleResponse(res, 400, "Movie ID and review are required");
+    }
+
+    try{
+        const user = await userLoginService(login);
+        if(!user || user.length == 0) {
+            return handleResponse(res, 404, "User not found");
+        }
+        const userId = user.id;
+
+        await addReviewDb(movieId, userId, review);
+        return handleResponse(res, 201, "Review added successfully");
+    }
+    catch(err) {
+        if(err.code == "23505") {
+            return handleResponse(res, 409, "Review already exists for this movie");
+        }
+        next(err);
+    }
+}
+
+module.exports.getReviewsForMovie = async (req, res, next) => {
+    const { movieId } = req.body;
+
+    if(!movieId) {
+        return handleResponse(res, 400, "Movie ID is required");
+    }
+
+    try {
+        const reviews = await getReviewsForMovie(movieId);
+        if(reviews.length === 0) {
+            return handleResponse(res, 404, "No reviews found for this movie");
+        }
+        return handleResponse(res, 200, "Reviews retrieved successfully", reviews);
+    } catch(err) {
         next(err);
     }
 }
