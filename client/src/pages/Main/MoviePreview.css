@@ -9,6 +9,12 @@
   --shadow: #b81d24;
 }
 
+.modalConatiner {
+  background-color: var(--background);
+  color: var(--text);
+  padding: 2rem;
+}
+
 .movie-detail-container {
   background-color: var(--card-bg);
   color: var(--text);

@@ -172,7 +172,26 @@ export const axiosDeleteMovie = async (currentUser, movie, login) => {
 }
 
 
-
+export const axiosAddUserReview = async (currentUser, movieId, review, login) => {
+  try {
+    console.log("Adding user review for movie:", movieId);
+    const response = await axiosInstance.post('/api/addReview', { movieId, review }, {
+      headers: {
+        Authorization: `Bearer ${currentUser.token}`
+      }
+    });
+    console.log("Review added successfully:", response.data);
+    return response.data;
+  }catch (err) {
+    if (err.response && err.response.status === 403) {
+      const newAccessToken = await axiosRefresh(currentUser, login);
+      if (newAccessToken) {
+        return axiosAddUserReview({ ...currentUser, token: newAccessToken }, movieId, review, login);
+      }
+    }
+    console.error("Error adding user review:", err);
+  }
+}
 
 
 export default axiosInstance;

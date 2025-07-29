@@ -6,7 +6,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import fallback from '../../Img/missing_img.png';
 import styles from './MoviePreview.css';
 import Header from '../../Components/Header';
-import { axiosAddToWatchlist } from '../../api/axios';
+import { axiosAddToWatchlist, axiosAddUserReview } from '../../api/axios';
 
 
 function MoviePreviewPage(){
@@ -15,6 +15,11 @@ function MoviePreviewPage(){
     const movie = location.state?.e;
     const [movieData, setMovieData] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const [reviews, setReviews] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [newReview, setNewReview] = useState("");
+
 
     const { user, login } = useAuth();
 
@@ -74,6 +79,12 @@ function MoviePreviewPage(){
             console.error("Error adding movie to watchlist:", error);
             alert("Wystąpił błąd podczas dodawania filmu do watchlisty.");
         }
+    }
+
+    const handleAddReview = async () => {
+        await axiosAddUserReview(user, movie.id, newReview, login);
+        setShowModal(false);
+        setNewReview("");
     }
 
 
@@ -189,6 +200,56 @@ function MoviePreviewPage(){
         )}
 
     </div>    
+
+
+        <div className="reviewContainer">
+        <h3>Recenzje</h3>
+        {/* {reviews.length === 0 ? (
+            <p>Brak recenzji.</p>
+        ) : (
+            reviews.map((r, i) => (
+            <div key={i} className="review-item">
+                {r.review}
+            </div>
+            ))
+        )} */}
+        <button
+            className="btn btn-outline-light mt-3"
+            onClick={() => setShowModal(true)}
+        >
+            + Dodaj recenzję
+        </button>
+        </div>
+
+      {showModal && (
+        <div className="modalContainer fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-96">
+            <h4 className="text-lg font-bold mb-2">Add Your Review</h4>
+            <textarea
+              className="w-full p-2 border rounded mb-4"
+              rows={4}
+              value={newReview}
+              onChange={(e) => setNewReview(e.target.value)}
+              placeholder="Write your review..."
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                className="bg-gray-300 px-4 py-2 rounded"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded"
+                onClick={handleAddReview}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
     )
 }
