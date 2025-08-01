@@ -6,7 +6,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import fallback from '../../Img/missing_img.png';
 import styles from './MoviePreview.css';
 import Header from '../../Components/Header';
-import { axiosAddToWatchlist, axiosAddUserReview } from '../../api/axios';
+import { axiosAddToWatchlist, axiosAddUserReview, axiosGetMovieReviews } from '../../api/axios';
 
 
 function MoviePreviewPage(){
@@ -49,6 +49,20 @@ function MoviePreviewPage(){
         fetchMovieDetails();
     }, [movie.id]);
 
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+            const res = await axiosGetMovieReviews(user, movie.id, login);
+            setReviews(res.data); // np. [{review: "tekst", user: "user1"}]
+            console.log("Fetched reviews:", res.data);
+            } catch (err) {
+            console.error("Błąd pobierania recenzji:", err);
+            }
+        };
+
+        fetchReviews();
+    }, [movie.id]);
+
     function getSlimMovieData(movie) {
         return {
             id: movie.id,
@@ -85,6 +99,7 @@ function MoviePreviewPage(){
         await axiosAddUserReview(user, movie.id, newReview, login);
         setShowModal(false);
         setNewReview("");
+        setReviews(prev => [...prev, { review: newReview, user: user.username }]);
     }
 
 
@@ -180,7 +195,7 @@ function MoviePreviewPage(){
             <div className="row">
             {movieData.recommendations.results.slice(0, 8).map((rec) => (
                 <div key={rec.id} className="col-6 col-md-3 mb-4">
-                <div className="card recommendation-card h-100">
+                <div className="recommendation-card h-100">
                     <img
                     src={rec.poster_path ? `https://image.tmdb.org/t/p/w500${rec.poster_path}` : fallback}
                     alt={rec.title}
@@ -204,7 +219,7 @@ function MoviePreviewPage(){
 
         <div className="reviewContainer">
         <h3>Recenzje</h3>
-        {/* {reviews.length === 0 ? (
+        {reviews.length === 0 ? (
             <p>Brak recenzji.</p>
         ) : (
             reviews.map((r, i) => (
@@ -212,7 +227,7 @@ function MoviePreviewPage(){
                 {r.review}
             </div>
             ))
-        )} */}
+        )}
         <button
             className="btn btn-outline-light mt-3"
             onClick={() => setShowModal(true)}

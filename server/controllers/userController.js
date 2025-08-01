@@ -186,7 +186,7 @@ module.exports.addReview = async (req, res, next) => {
 }
 
 module.exports.getReviewsForMovie = async (req, res, next) => {
-    const { movieId } = req.body;
+    const { movieId } = req.query;
 
     if(!movieId) {
         return handleResponse(res, 400, "Movie ID is required");

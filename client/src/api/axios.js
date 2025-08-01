@@ -194,4 +194,31 @@ export const axiosAddUserReview = async (currentUser, movieId, review, login) =>
 }
 
 
+export const axiosGetMovieReviews = async (currentUser, movieId, login) => {
+  try {
+    console.log("Fetching reviews for movie:", movieId);
+    const response = await axiosInstance.get('/api/getReviews', {
+      params: { movieId },
+      headers: {
+        Authorization: `Bearer ${currentUser.token}`
+      }
+    });
+    console.log("Reviews fetched successfully:", response.data);
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.status === 403) {
+      const newAccessToken = await axiosRefresh(currentUser, login);
+      if (newAccessToken) {
+        return axiosGetMovieReviews(
+          { ...currentUser, token: newAccessToken },
+          movieId,
+          login
+        );
+      }
+    }
+    console.error("Error fetching movie reviews:", err);
+  }
+};
+
+
 export default axiosInstance;
