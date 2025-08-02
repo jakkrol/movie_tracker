@@ -6,7 +6,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import fallback from '../../Img/missing_img.png';
 import styles from '../Main/MoviePreview.css';
 import Header from '../../Components/Header';
-import { axiosAddToWatchlist } from '../../api/axios';
+import { axiosAddUserReview, axiosGetMovieReviews } from '../../api/axios';
 
 
 function MoviePreviewPage(){
@@ -17,12 +17,40 @@ function MoviePreviewPage(){
     const [loading, setLoading] = useState(true);
 
 
+    const [reviews, setReviews] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [newReview, setNewReview] = useState("");
+
+    const { user, login } = useAuth();
+
     useEffect(() => {
         setMovieData(movie);
         console.log(movieData);
         setLoading(false);
     }, []);
 
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+            const res = await axiosGetMovieReviews(user, movie.id, login);
+            setReviews(res.data); // np. [{review: "tekst", user: "user1"}]
+            console.log("Fetched reviews:", res.data);
+            } catch (err) {
+            console.error("Błąd pobierania recenzji:", err);
+            }
+        };
+
+        fetchReviews();
+    }, [movieData, user, login]);
+
+
+        const handleAddReview = async () => {
+            await axiosAddUserReview(user, movie.id, newReview, login);
+            setShowModal(false);
+            setNewReview("");
+            setReviews(prev => [...prev, { review: newReview, user: user.username }]);
+        }
 
     if(!movie){
         return <Navigate to="/main"/>
@@ -136,6 +164,54 @@ function MoviePreviewPage(){
         )} */}
 
     </div>    
+            <div className="reviewContainer">
+        <h3>Recenzje</h3>
+        {reviews.length === 0 ? (
+            <p>Brak recenzji.</p>
+        ) : (
+            reviews.map((r, i) => (
+            <div key={i} className="review-item">
+                {r.review}
+            </div>
+            ))
+        )}
+        <button
+            className="btn btn-outline-light mt-3"
+            onClick={() => setShowModal(true)}
+        >
+            + Dodaj recenzję
+        </button>
+        
+
+      {showModal && (
+        <div className="modalContainer fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="p-6 rounded shadow-lg w-96">
+            <h4 className="text-lg font-bold mb-2">Add Your Review</h4>
+            <textarea
+              className="w-full p-2 border rounded mb-4 review-textarea"
+              rows={4}
+              value={newReview}
+              onChange={(e) => setNewReview(e.target.value)}
+              placeholder="Write your review..."
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                className="bg-gray-300 px-4 py-2 rounded styled-button"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded styled-button"
+                onClick={handleAddReview}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
     </div>
     )
 }

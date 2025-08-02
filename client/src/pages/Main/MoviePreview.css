@@ -157,3 +157,30 @@
   font-size: 0.85rem;
   color: var(--muted-light);
 }
+
+.review-textarea {
+  background-color: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--secondary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.styled-button {
+  display: inline-block;
+  padding: 15px 30px;
+  margin: 0 15px 15px 0;
+  background-image: linear-gradient(45deg, var(--accent) 0%, var(--secondary) 51%, var(--accent) 100%);
+  color: white;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0px 0px 14px -7px var(--accent);
+  cursor: pointer;
+  transition: 0.5s;
+  background-size: 200% auto;
+
+}
+
+.reviewContainer {
+  padding: 1rem;
+}

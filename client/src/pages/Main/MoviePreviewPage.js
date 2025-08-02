@@ -234,14 +234,14 @@ function MoviePreviewPage(){
         >
             + Dodaj recenzję
         </button>
-        </div>
+        
 
       {showModal && (
         <div className="modalContainer fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-96">
+          <div className="p-6 rounded shadow-lg w-96">
             <h4 className="text-lg font-bold mb-2">Add Your Review</h4>
             <textarea
-              className="w-full p-2 border rounded mb-4"
+              className="w-full p-2 border rounded mb-4 review-textarea"
               rows={4}
               value={newReview}
               onChange={(e) => setNewReview(e.target.value)}
@@ -249,13 +249,13 @@ function MoviePreviewPage(){
             />
             <div className="flex justify-end gap-2">
               <button
-                className="bg-gray-300 px-4 py-2 rounded"
+                className="bg-gray-300 px-4 py-2 rounded styled-button"
                 onClick={() => setShowModal(false)}
               >
                 Cancel
               </button>
               <button
-                className="bg-green-500 text-white px-4 py-2 rounded"
+                className="bg-green-500 text-white px-4 py-2 rounded styled-button"
                 onClick={handleAddReview}
               >
                 Submit
@@ -264,6 +264,7 @@ function MoviePreviewPage(){
           </div>
         </div>
       )}
+      </div>
 
     </div>
     )
