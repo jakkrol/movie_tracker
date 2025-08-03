@@ -1,7 +1,9 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function Header() {
+    const location = useLocation();
+
     return (
     <div className="px-3">
         <nav className="navbar navbar-expand-lg navbar-dark">
@@ -10,12 +12,12 @@ function Header() {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                <li className="nav-item active">
-                    <Link className="nav-link fs-4" to="/main"><strong>Home</strong></Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link fs-4" to="/watchlist">Watchlist</Link>
-                </li>
+                    <li className={`nav-item ${location.pathname === '/main' ? 'active' : ''}`}>
+                        <Link className="nav-link fs-4" to="/main"><strong>Home</strong></Link>
+                    </li>
+                    <li className={`nav-item ${location.pathname === '/watchlist' ? 'active' : ''}`}>
+                        <Link className="nav-link fs-4" to="/watchlist">Watchlist</Link>
+                    </li>
                 </ul>
             </div>
         </nav>
