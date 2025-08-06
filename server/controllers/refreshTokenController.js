@@ -34,7 +34,7 @@ module.exports.handleRefreshToken = async (req, res, next) => {
         const accessToken = jwt.sign(
           { login: decoded.login },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: '30s' }
+          { expiresIn: '15m' }
         );
 
         res.json({ accessToken });

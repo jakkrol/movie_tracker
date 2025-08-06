@@ -209,16 +209,33 @@ export const axiosGetMovieReviews = async (currentUser, movieId, login) => {
     if (err.response && err.response.status === 403) {
       const newAccessToken = await axiosRefresh(currentUser, login);
       if (newAccessToken) {
-        return axiosGetMovieReviews(
-          { ...currentUser, token: newAccessToken },
-          movieId,
-          login
-        );
+        return axiosGetMovieReviews({ ...currentUser, token: newAccessToken }, movieId, login);
       }
     }
     console.error("Error fetching movie reviews:", err);
   }
 };
+
+export const axiosGetUserProfile = async (currentUser, login, username) => {
+  try {
+    console.log("Fetching: " + username);
+    const respone = await axiosInstance.get('/api/getProfile', {
+      params: { username },
+      headers: {
+        Authorization: `Bearer ${currentUser.token}`
+      }
+  });
+  console.log("Profile data fetched successfully:", respone.data);
+  return respone.data;
+} catch (err){
+    if(err.response && err.response.status === 403) {
+      const newAccessToken = await axiosRefresh(currentUser, login);
+      if(newAccessToken) {
+        return axiosGetUserProfile({ ...currentUser, token: newAccessToken }, login, username);
+      }
+    }
+  }
+}
 
 
 export default axiosInstance;

@@ -9,6 +9,7 @@ import RegisterPage from './pages/Login/RegisterPage';
 import MoviePreviewPage from './pages/Main/MoviePreviewPage';
 import WatchlistPage from './pages/Watchlist/WatchlistPage';
 import MoviePreviewWatchlistPage from './pages/Watchlist/MoviePreviewWatchlistPage';
+import ProfilePage from './pages/UserProfile/ProfilePage';
 
 
 function App() {
@@ -37,6 +38,12 @@ function App() {
             <Route path='/watchlist/details' element={
               <RequireAuth>
                 <MoviePreviewWatchlistPage/>
+              </RequireAuth>
+              } />
+
+            <Route path='/profile' element={
+              <RequireAuth>
+                <ProfilePage/>
               </RequireAuth>
               } />
           </Routes>

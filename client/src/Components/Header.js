@@ -16,6 +16,10 @@ function Header() {
                 <li className="nav-item">
                     <Link className="nav-link fs-4" to="/watchlist">Watchlist</Link>
                 </li>
+
+                <li className="nav-item">
+                    <Link className="nav-link fs-4" to="/profile">Profil</Link>
+                </li>
                 </ul>
             </div>
         </nav>

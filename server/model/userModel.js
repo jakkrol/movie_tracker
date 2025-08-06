@@ -80,3 +80,8 @@ module.exports.getReviewsForMovie = async (movie_id) => {
     const result = await pool.query('SELECT * FROM reviews WHERE movie_id = $1;', [movie_id]);
     return result.rows;
 }
+
+module.exports.getProfileData = async (username) => {
+    const result = await pool.query('SELECT login, avatar_url, bio, created_at FROM users WHERE login = $1;', [username]);
+    return result.rows[0];
+}

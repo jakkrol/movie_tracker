@@ -1,4 +1,4 @@
-const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist, updateWatchlist, deleteMoveFromWatchlist, addReviewDb, getReviewsForMovie } = require('../model/userModel');
+const { userLoginService, userRegisterService, addMovie, addMovieToWatchlist, checkIfMovieExist, getWatchlist, updateWatchlist, deleteMoveFromWatchlist, addReviewDb, getReviewsForMovie, getProfileData } = require('../model/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -198,6 +198,24 @@ module.exports.getReviewsForMovie = async (req, res, next) => {
             return handleResponse(res, 404, "No reviews found for this movie");
         }
         return handleResponse(res, 200, "Reviews retrieved successfully", reviews);
+    } catch(err) {
+        next(err);
+    }
+}
+
+module.exports.getProfileData = async (req, res, next) => {
+    const user = req.user;
+    const username = req.query.username;
+    if(!user) {
+        return handleResponse(res, 400, "Login is required");
+    }
+
+    try {
+        const profileData = await getProfileData(username);
+        if(!profileData) {
+            return handleResponse(res, 404, "Profile not found");
+        }
+        return handleResponse(res, 200, "Profile data retrieved successfully", profileData);
     } catch(err) {
         next(err);
     }
