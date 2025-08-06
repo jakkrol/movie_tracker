@@ -1,4 +1,3 @@
-
 .navbar-nav {
   gap: 1rem; /* odstęp między linkami */
 }
@@ -13,7 +12,18 @@
   align-items: center; /* wyrównanie pionowe tekstu */
   line-height: 1;      /* wyeliminuj różnice w linii */
   margin: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   vertical-align: middle;
+  color: rgba(255,255,255,0.75);
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+}
+
+.nav-item.active .nav-link {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff; /* underline dla aktywnego linku */
 }

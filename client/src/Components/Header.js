@@ -1,7 +1,9 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function Header() {
+    const location = useLocation();
+
     return (
     <div className="px-3">
         <nav className="navbar navbar-expand-lg navbar-dark">
