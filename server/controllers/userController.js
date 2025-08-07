@@ -26,7 +26,7 @@ module.exports.userLogin = async (req, res, next) =>{
             const accessToken = jwt.sign(
                 { "login": user.login },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '15m' }
+                { expiresIn: '10s' }
             )
 
             const refreshToken = jwt.sign(
@@ -34,7 +34,7 @@ module.exports.userLogin = async (req, res, next) =>{
                 process.env.REFRESH_TOKEN_SECRET,
                 { expiresIn: '1d' }
             )
-            res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24*60*60*1000});
+            res.cookie('jwt', refreshToken, {httpOnly: true, secure: false, sameSite: 'None',  maxAge: 24*60*60*1000});
 
             return handleResponse(res, 200, "Login success", {token: accessToken, user: user.login  });
         }else{

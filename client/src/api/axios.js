@@ -219,14 +219,14 @@ export const axiosGetMovieReviews = async (currentUser, movieId, login) => {
 export const axiosGetUserProfile = async (currentUser, login, username) => {
   try {
     console.log("Fetching: " + username);
-    const respone = await axiosInstance.get('/api/getProfile', {
+    const response = await axiosInstance.get('/api/getProfile', {
       params: { username },
       headers: {
         Authorization: `Bearer ${currentUser.token}`
       }
   });
-  console.log("Profile data fetched successfully:", respone.data);
-  return respone.data;
+  console.log("Profile data fetched successfully:", response.data);
+  return response.data;
 } catch (err){
     if(err.response && err.response.status === 403) {
       const newAccessToken = await axiosRefresh(currentUser, login);

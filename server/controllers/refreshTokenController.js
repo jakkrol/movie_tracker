@@ -4,7 +4,6 @@ require('dotenv').config();
 
 module.exports.handleRefreshToken = async (req, res, next) => {
   const cookies = req.cookies;
-
   try {
     if (!cookies?.jwt) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -34,7 +33,7 @@ module.exports.handleRefreshToken = async (req, res, next) => {
         const accessToken = jwt.sign(
           { login: decoded.login },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: '15m' }
+          { expiresIn: '10s' }
         );
 
         res.json({ accessToken });

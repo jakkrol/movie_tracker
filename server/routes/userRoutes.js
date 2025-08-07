@@ -21,7 +21,7 @@ router.post('/addReview', verifyJWT, addReview);
 
 router.get('/getReviews', verifyJWT, getReviewsForMovie);
 
-router.get('/refresh', verifyJWT, handleRefreshToken);
+router.get('/refresh', handleRefreshToken);
 
 router.get('/getProfile', verifyJWT, getProfileData);
 

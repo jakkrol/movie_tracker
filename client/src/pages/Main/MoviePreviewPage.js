@@ -237,8 +237,8 @@ function MoviePreviewPage(){
         
 
       {showModal && (
-        <div className="modalContainer fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="p-6 rounded shadow-lg w-96">
+        <div className="modalContainer fixed inset-0 flex justify-center items-center z-50">
+
             <h4 className="text-lg font-bold mb-2">Add Your Review</h4>
             <textarea
               className="w-full p-2 border rounded mb-4 review-textarea"
@@ -261,7 +261,7 @@ function MoviePreviewPage(){
                 Submit
               </button>
             </div>
-          </div>
+
         </div>
       )}
       </div>
