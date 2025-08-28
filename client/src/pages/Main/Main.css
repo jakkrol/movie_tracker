@@ -314,6 +314,7 @@ input[type="text"]:focus {
   padding-bottom: 15px; /* trochę przestrzeni pod scroll */
   scroll-behavior: smooth;
   box-sizing: content-box;
+  overflow-y: hidden;
 }
 
 .movies-container::-webkit-scrollbar {
@@ -343,10 +344,10 @@ input[type="text"]:focus {
   flex-direction: column;
 }
 
-.movie-card:hover {
+/* .movie-card:hover {
   transform: scale(1.07);
   box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-}
+} */
 
 .movie-card img {
   width: 100%;

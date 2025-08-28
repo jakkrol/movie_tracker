@@ -6,6 +6,7 @@ module.exports.handleRefreshToken = async (req, res, next) => {
   const cookies = req.cookies;
   try {
     if (!cookies?.jwt) {
+      console.log("Brak ciasteczek");
       return res.status(401).json({ message: "Unauthorized" });
     }
 

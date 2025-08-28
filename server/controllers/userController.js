@@ -34,7 +34,8 @@ module.exports.userLogin = async (req, res, next) =>{
                 process.env.REFRESH_TOKEN_SECRET,
                 { expiresIn: '1d' }
             )
-            res.cookie('jwt', refreshToken, {httpOnly: true, secure: false, sameSite: 'None',  maxAge: 24*60*60*1000});
+            //someSite needs to be None if in production, set Lax if for local testing
+            res.cookie('jwt', refreshToken, {httpOnly: true, secure: false, sameSite: 'Lax',  maxAge: 24*60*60*1000});
 
             return handleResponse(res, 200, "Login success", {token: accessToken, user: user.login  });
         }else{

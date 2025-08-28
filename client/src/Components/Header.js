@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
 
 function Header() {
@@ -12,16 +13,16 @@ function Header() {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                <li className="nav-item active">
+                <motion.li className="nav-item active" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
                     <Link className="nav-link fs-4" to="/main"><strong>Home</strong></Link>
-                </li>
-                <li className="nav-item">
+                </motion.li>
+                <motion.li className="nav-item" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
                     <Link className="nav-link fs-4" to="/watchlist">Watchlist</Link>
-                </li>
+                </motion.li>
 
-                <li className="nav-item">
+                <motion.li className="nav-item" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
                     <Link className="nav-link fs-4" to="/profile">Profil</Link>
-                </li>
+                </motion.li>
                 </ul>
             </div>
         </nav>

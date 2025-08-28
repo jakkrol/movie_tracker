@@ -21,9 +21,10 @@ router.post('/addReview', verifyJWT, addReview);
 
 router.get('/getReviews', verifyJWT, getReviewsForMovie);
 
+router.get('/getProfile', verifyJWT, getProfileData);
+
 router.get('/refresh', handleRefreshToken);
 
-router.get('/getProfile', verifyJWT, getProfileData);
 
 router.get('/testRefresh', (req, res) => {
   console.log("Test działa");
