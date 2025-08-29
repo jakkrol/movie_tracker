@@ -15,6 +15,14 @@ import ProfilePage from './pages/UserProfile/ProfilePage';
 function App() {
   return (
     <div className="App">
+<div class="background">
+  <span class="ball"></span>
+  <span class="ball"></span>
+  <span class="ball"></span>
+  <span class="ball"></span>
+  <span class="ball"></span>
+  <span class="ball"></span>
+</div>
       <AuthProvider>
         <Router>
           <Routes>

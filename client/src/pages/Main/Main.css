@@ -53,7 +53,7 @@
 }
 
 .topRatedContainer {
-  background-image: url(../../Img/banner2.jpg);
+  background-image: url(../../Img/banner2.jpg); 
 }
 
 .topRatedContainer h2 {
@@ -302,9 +302,6 @@ input[type="text"]:focus {
   text-align: start;
   font-family: 'Comic Sans MS', cursive;
 }
-
-
-
 
 .movies-container {
   display: flex;
