@@ -6,7 +6,7 @@ module.exports.userLoginService = async (login) => {
 }
 
 module.exports.userRegisterService = async (login, password) => {
-    const result = await pool.query("INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *", [login, password]);
+    const result = await pool.query("INSERT INTO users (login, password, created_at) VALUES ($1, $2, $3) RETURNING *", [login, password, Date.now()]);
     return result.rows[0];
 }
 

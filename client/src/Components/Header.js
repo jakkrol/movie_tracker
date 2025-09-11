@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
 
+const MotionLink = motion(Link);
+
 function Header() {
     const location = useLocation();
 
@@ -13,16 +15,50 @@ function Header() {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                <motion.li className="nav-item active" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                    <Link className="nav-link fs-4" to="/main"><strong>Home</strong></Link>
-                </motion.li>
-                <motion.li className="nav-item" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                    <Link className="nav-link fs-4" to="/watchlist">Watchlist</Link>
-                </motion.li>
+                    <li className="nav-item">
+                    <motion.Link
+                        to="/main"
+                        className="nav-link fs-4"
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                        display: "inline-block",     
+                        transformOrigin: "center",
+                        willChange: "transform"
+                        }}>
+                        <strong>Home</strong>
+                    </motion.Link>
+                    </li>
 
-                <motion.li className="nav-item" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                    <Link className="nav-link fs-4" to="/profile">Profil</Link>
-                </motion.li>
+                    <li className="nav-item">
+                    <motion.Link
+                        to="/main"
+                        className="nav-link fs-4"
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                        display: "inline-block",     
+                        transformOrigin: "center",
+                        willChange: "transform"
+                        }}>
+                        Watchlist
+                    </motion.Link>
+                    </li>
+
+                    <li className="nav-item">
+                    <motion.Link
+                        to="/main"
+                        className="nav-link fs-4"
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                        display: "inline-block",       
+                        transformOrigin: "center",
+                        willChange: "transform"
+                        }}>
+                        Profile
+                    </motion.Link>
+                    </li>
                 </ul>
             </div>
         </nav>

@@ -1,5 +1,6 @@
 import react, {useState, useEffect, use} from 'react';
 import Header from '../../Components/Header';
+import styles from '../Main/MoviePreviewPage';
 import { axiosGetUserProfile } from '../../api/axios';
 import { useAuth } from '../../Contexts/AuthContext';
 
@@ -38,14 +39,14 @@ useEffect(() => {
           <div className="mt-4 space-y-1 text-gray-600 text-sm">
             {/* <p><strong>Role:</strong> {user.role || 'User'}</p> */}
             <p><strong>Joined:</strong> {new Date(profile.created_at).toLocaleDateString()}</p>
-            {user.bio && <p><strong>Bio:</strong> {profile.bio}</p>}
+            {profile.bio && <p><strong>Bio:</strong> {profile.bio}</p>}
           </div>
 
           <div className="mt-4 flex gap-3 justify-center md:justify-start">
-            <button className="">
+            <button className="px-4 py-2 styled-button">
               Edit Profile
             </button>
-            <button className="">
+            <button className="px-4 py-2 styled-button">
               Change Password
             </button>
           </div>
