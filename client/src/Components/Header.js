@@ -16,38 +16,39 @@ function Header() {
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                    <motion.Link
+                        <MotionLink
                         to="/main"
                         className="nav-link fs-4"
                         whileHover={{ scale: 1.08 }}
                         whileTap={{ scale: 0.95 }}
                         style={{
-                        display: "inline-block",     
-                        transformOrigin: "center",
-                        willChange: "transform"
-                        }}>
+                            display: "inline-block",
+                            transformOrigin: "center",
+                            willChange: "transform"
+                        }}
+                        >
                         <strong>Home</strong>
-                    </motion.Link>
+                        </MotionLink>
                     </li>
 
                     <li className="nav-item">
-                    <motion.Link
-                        to="/main"
-                        className="nav-link fs-4"
-                        whileHover={{ scale: 1.08 }}
-                        whileTap={{ scale: 0.95 }}
-                        style={{
-                        display: "inline-block",     
-                        transformOrigin: "center",
-                        willChange: "transform"
-                        }}>
-                        Watchlist
-                    </motion.Link>
+                        <MotionLink
+                            to="/watchlist"
+                            className="nav-link fs-4"
+                            whileHover={{ scale: 1.08 }}
+                            whileTap={{ scale: 0.95 }}
+                            style={{
+                            display: "inline-block",       
+                            transformOrigin: "center",
+                            willChange: "transform"
+                            }}>
+                            Watchlist
+                        </MotionLink>
                     </li>
 
                     <li className="nav-item">
-                    <motion.Link
-                        to="/main"
+                    <MotionLink
+                        to="/profile"
                         className="nav-link fs-4"
                         whileHover={{ scale: 1.08 }}
                         whileTap={{ scale: 0.95 }}
@@ -57,7 +58,7 @@ function Header() {
                         willChange: "transform"
                         }}>
                         Profile
-                    </motion.Link>
+                    </MotionLink>
                     </li>
                 </ul>
             </div>

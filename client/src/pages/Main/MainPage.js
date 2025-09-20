@@ -8,7 +8,74 @@ import styles from './Main.css';
 import fallback from '../../Img/missing_img.png';
 import Header from '../../Components/Header';
 import { motion, AnimatePresence } from "framer-motion";
+import { useRef } from "react";
 
+
+function HorizontalRow({ movies, handleMovieClick }) {
+  const containerRef = useRef();
+  const [visibleIndexes, setVisibleIndexes] = useState([]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setVisibleIndexes((prev) => {
+          const updated = [...prev];
+          entries.forEach((entry) => {
+            const idx = Number(entry.target.dataset.idx);
+            if (entry.isIntersecting) {
+              // add if not already present
+              if (!updated.includes(idx)) updated.push(idx);
+            } else {
+              // remove if leaving viewport
+              const indexPos = updated.indexOf(idx);
+              if (indexPos !== -1) updated.splice(indexPos, 1);
+            }
+          });
+          return updated;
+        });
+      },
+      { root: container, threshold: 0.5 }
+    );
+
+    Array.from(container.children).forEach((child, idx) => {
+      child.dataset.idx = idx;
+      observer.observe(child);
+    });
+
+    return () => observer.disconnect();
+  }, [movies]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="movies-container"
+      style={{ display: "flex", overflowX: "auto", gap: "16px" }}
+    >
+      {movies.map((movie, idx) => (
+        <motion.div
+          key={movie.id}
+          className="movie-card"
+          onClick={() => handleMovieClick(movie)}
+          initial={{ opacity: 1, scale: 0 }}
+          animate={visibleIndexes.includes(idx) ? { scale: 1 } : { scale: 0 }}
+          transition={{ type: "spring", stiffness: 500, damping: 25 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <img
+            src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallback}
+            alt={movie.title}
+          />
+          <h3>{movie.title}</h3>
+          <p>{movie.release_date}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
 
 function MainPage() {
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -295,72 +362,17 @@ return (
 
       <div className="popularContainer">
         <h2>Popularne</h2>
-        <div className="movies-container">
-          {popularMovies.map(movie => (
-            <motion.div
-              key={movie.id}
-              className="movie-card"
-              onClick={() => handleMovieClick(movie)}
-              initial={{ opacity: 1, scale: 0 }}  
-              whileInView={{ opacity: 1, scale: 1 }} 
-              transition={{ type: "spring", stiffness: 500, damping: 25 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              viewport={{ once: false, amount: 0.2 }}  
-            >
-              <img
-                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallback}
-                alt={movie.title}
-              />
-              <h3>{movie.title}</h3>
-              <p>{movie.release_date}</p>
-            </motion.div>
-          ))}
-        </div>
+        <HorizontalRow movies={popularMovies} handleMovieClick={handleMovieClick} />
       </div>
 
       <div className="cinemaContainer">
         <h2>W Kinach</h2>
-        <div className="movies-container">
-          {cinemaMovies.map(movie => (
-            <motion.div key={movie.id}
-              className="movie-card"
-              onClick={() => handleMovieClick(movie)}
-              initial={{ opacity: 1, scale: 0 }}  
-              whileInView={{ opacity: 1, scale: 1 }} 
-              transition={{ type: "spring", stiffness: 500, damping: 25 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              viewport={{ once: false, amount: 0.2 }}  
-            >
-              <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallback} alt={movie.title} />
-              <h3>{movie.title}</h3>
-              <p>{movie.release_date}</p>
-            </motion.div>
-          ))}
-        </div>
+        <HorizontalRow movies={cinemaMovies} handleMovieClick={handleMovieClick} />
       </div>
 
       <div className="topRatedContainer">
         <h2>Najlepiej Oceniane</h2>
-        <div className="movies-container">
-          {topRatedMovies.map(movie => (
-            <motion.div key={movie.id}
-              className="movie-card"
-              onClick={() => handleMovieClick(movie)}
-              initial={{ opacity: 1, scale: 0 }}  
-              whileInView={{ opacity: 1, scale: 1 }} 
-              transition={{ type: "spring", stiffness: 500, damping: 25 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              viewport={{ once: false, amount: 0 }}  
-            >
-              <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallback} alt={movie.title} />
-              <h3>{movie.title}</h3>
-              <p>{movie.release_date}</p>
-            </motion.div>
-          ))}
-        </div>
+        <HorizontalRow movies={topRatedMovies} handleMovieClick={handleMovieClick} />
       </div>
 
 
