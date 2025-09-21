@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --background: #121212;
   --card-bg: #1e1e1e;
   --primary: #e50914;
@@ -7,7 +7,19 @@
   --muted: #999;
   --accent: #ff3b6c;
   --shadow: #b81d24;
+} */
+
+:root {
+  --background: #1a1a1a;     /* slightly lighter dark background */
+  --card-bg: #272727;         /* brighter card background */
+  --primary: #ff4500;         /* vivid orange-red */
+  --secondary: #ff6f31;       /* lighter orange for secondary elements */
+  --text: #f5f5f5;            /* keep text bright */
+  --muted: #ccc;              /* lighter muted text */
+  --accent: #ffa500;          /* bright orange accent */
+  --shadow: #ff6f31;          /* shadow matching secondary */
 }
+
 
 *{
   margin: 0;
@@ -23,8 +35,8 @@
   top: 0;
   left: 0;
   overflow: hidden;
-  z-index: -1;        /* 👈 always behind */
-  pointer-events: none; /* 👈 prevents blocking clicks */
+  z-index: -1;  
+  pointer-events: none; 
 }
 
 .App {
@@ -32,7 +44,7 @@
   background-color: var(--background);
   min-height: 100vh;
   overflow-x: auto;
-  position: relative; /* 👈 creates a stacking context above .background */
+  position: relative; 
   z-index: 0;
 }
 
