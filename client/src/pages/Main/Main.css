@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --background: #121212;
   --background-rgb: 18, 18, 18;
 
@@ -22,7 +22,7 @@
 
   --shadow: #b81d24;
   --shadow-rgb: 184, 29, 36;
-}
+} */
 
 
 /* :root {
@@ -243,7 +243,7 @@ option {
 }
 
 /* Search input */
-input[type="text"] {
+.inputText {
   width: 300px;
   height: 40px;
   padding: 0 12px;
@@ -256,16 +256,17 @@ input[type="text"] {
   transition: border 0.2s ease-in-out, background-color 0.2s;
 }
 
-input[type="text"]:hover {
+.inputText:hover {
   border-color: var(--accent);
   background-color: #2a2a2a;
 }
 
-input[type="text"]:focus {
+.inputText:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(255, 59, 108, 0.3);
 }
+
 
 /* Search button */
 .search-button {

@@ -9,16 +9,6 @@
   --shadow: #b81d24;
 } */
 
-:root {
-  --background: #1a1a1a;     /* slightly lighter dark background */
-  --card-bg: #272727;         /* brighter card background */
-  --primary: #ff4500;         /* vivid orange-red */
-  --secondary: #ff6f31;       /* lighter orange for secondary elements */
-  --text: #f5f5f5;            /* keep text bright */
-  --muted: #ccc;              /* lighter muted text */
-  --accent: #ffa500;          /* bright orange accent */
-  --shadow: #ff6f31;          /* shadow matching secondary */
-}
 
 
 *{

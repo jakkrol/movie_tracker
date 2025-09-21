@@ -323,7 +323,7 @@ return (
       <div className="row justify-content-center align-items-center g-3">
         <div className="col-12 col-md-6 d-flex justify-content-center searcherBox">
           <input
-            className="searchers"
+            className="searchers inputText"
             type="text"
             name="search"
             value={movieTitle}
