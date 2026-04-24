@@ -6,7 +6,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import fallback from '../../Img/missing_img.png';
 import styles from '../Main/MoviePreview.css';
 import Header from '../../Components/Header';
-import { axiosAddUserReview, axiosGetMovieReviews } from '../../api/axios';
+import { axiosAddUserReview, axiosGetMovieReviews } from '../../services/movieService';
 
 
 function MoviePreviewPage(){

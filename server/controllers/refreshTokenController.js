@@ -36,7 +36,7 @@ module.exports.handleRefreshToken = async (req, res, next) => {
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: '10s' }
         );
-
+        console.log("Wygenerowany nowy accessToken!!!!!!!!!!!!:", accessToken);
         res.json({ accessToken });
       }
     );

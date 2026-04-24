@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Header from '../../Components/Header';
 import fallback from '../../Img/missing_img.png';
 import styles from '../Main/Main.css';
-import { fetchWatchlist, axiosUpdateWatched, axiosDeleteMovie } from "../../api/axios";
+import { fetchWatchlist, axiosUpdateWatched, axiosDeleteMovie } from "../../services/movieService";
 import { useAuth } from "../../Contexts/AuthContext";
 
 function WatchlistPage() {
