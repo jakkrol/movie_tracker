@@ -1,7 +1,7 @@
 import react, {useState, useEffect, use} from 'react';
 import Header from '../../Components/Header';
 import styles from '../Main/MoviePreviewPage';
-import { axiosGetUserProfile } from '../../api/axios';
+import { axiosGetUserProfile } from '../../services/userService';
 import { useAuth } from '../../Contexts/AuthContext';
 
 

@@ -25,7 +25,7 @@ function MoviePreviewPage(){
 
 
     useEffect(() => {
-        console.log(movie);
+        console.log("Selected movie:", movie);
         const fetchMovieDetails = async () => {
         try {
             const response = await axios.get(

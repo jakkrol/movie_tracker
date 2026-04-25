@@ -33,7 +33,8 @@ function MoviePreviewPage(){
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-            const res = await axiosGetMovieReviews(user, movie.id, login);
+            //console.log("Fetching reviews for movie:", movie.movie_id);
+            const res = await axiosGetMovieReviews(user, movie.movie_id, login);
             setReviews(res.data); // np. [{review: "tekst", user: "user1"}]
             console.log("Fetched reviews:", res.data);
             } catch (err) {

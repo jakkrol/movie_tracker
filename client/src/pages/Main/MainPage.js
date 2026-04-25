@@ -348,7 +348,7 @@ return (
           {movies.length > 0 && (
         <div className="searchResults">
           <h2>Wyniki wyszukiwania</h2>
-          <div className="movies-container">
+          {/* <div className="movies-container">
             {movies.map(movie => (
               <div key={movie.id} className="movie-card" onClick={() => handleMovieClick(movie)}>
                 <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallback} alt={movie.title} />
@@ -356,7 +356,8 @@ return (
                 <p>{movie.release_date}</p>
               </div>
             ))}
-          </div>
+          </div> */}
+          <HorizontalRow movies={movies} handleMovieClick={handleMovieClick} />
         </div>
       )}
 
