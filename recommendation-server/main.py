@@ -40,23 +40,28 @@ CORS(app)
 # print("All words:", words)
 
 
+stemmer = PorterStemmer()
 
 def preprocess_text():
     checked_movie = fetch_movie(550)
     recommended_movies =fetch_data(550)
-    print("Cosine similarity:", res, "Cosine similarity A-B:", res2)
+
+    movie_ids = []
+    movie_ids.append(checked_movie['id'])
+
 
     checked_movie['overview'] = word_tokenize(checked_movie['overview'])
     filtered_movie = [
-        word.lower() for word in checked_movie['overview'] if word.lower() not in stopwords and word.isalpha()
+        stemmer.stem(word.lower()) for word in checked_movie['overview'] if word.lower() not in stopwords and word.isalpha()
     ]
     checked_movie['overview'] = filtered_movie
 
     for item in recommended_movies:
+        movie_ids.append(item['id'])
         item['overview'] = word_tokenize(item['overview'])
 
         filtered_overview = [
-            word.lower() for word in item['overview'] if word.lower() not in stopwords and word.isalpha() 
+            stemmer.stem(word.lower()) for word in item['overview'] if word.lower() not in stopwords and word.isalpha()
         ]
 
         item['overview'] = filtered_overview
@@ -69,29 +74,40 @@ def preprocess_text():
         preprecessed_data.append(' '.join(movie['overview']))
 
 
-    return preprecessed_data
+    return preprecessed_data, movie_ids
 
 
 
-X = [0,0,0]
-Y = [1,1,1]
+# X = [0,0,0]
+# Y = [1,1,1]
 
-A = [1,1,1]
-B = [1,1,1]
-res = cosine_similarity([X], [Y])
-res2 = cosine_similarity([A], [B])
+# A = [1,1,1]
+# B = [1,1,1]
+# res = cosine_similarity([X], [Y])
+# res2 = cosine_similarity([A], [B])
+#print("Cosine similarity:", res, "Cosine similarity A-B:", res2)
 
 stopwords = set(stopwords.words('english'))
 
 
 @app.route("/")
 def home():
-    data = preprocess_text()
+    data, movie_ids = preprocess_text()
     vectorizer = TfidfVectorizer()
     matrix = vectorizer.fit_transform(data)
     cosine_sim = cosine_similarity(matrix[0:1], matrix)
     #return matrix.toarray().tolist()
-    return cosine_sim.tolist()
+    hashmap = {}
+    for i in range(0, len(data)):
+        hashmap[movie_ids[i]] = cosine_sim[0][i]
+    
+    # m1 = fetch_movie(550)
+    # m2 = fetch_movie(1213)
+    # return jsonify({
+    # "movie_1": m1,
+    # "movie_2": m2
+    # })
+    return jsonify(hashmap)
 
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ def fetch_movie(movie_id):
     
     if response.status_code == 200:
         data = response.json()
-        return {"title": data['title'], "overview": data['overview']}
+        return {"id": data['id'], "title": data['title'], "overview": data['overview']}
     else:
         print(f"Error: {response.status_code}")
         return None
@@ -38,7 +38,7 @@ def fetch_data(movie_id):
             #     print(f"   Opis: {movie['overview'][:100]}...")
             #     print("-" * 20)
 
-        return [{"title": movie['title'], "overview": movie['overview']} for movie in results]
+        return [{"id": movie['id'], "title": movie['title'], "overview": movie['overview']} for movie in results]
     else:
         print(f"Error: {response.status_code}")
         return []
