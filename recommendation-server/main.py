@@ -60,8 +60,18 @@ def preprocess_text():
         ]
 
         item['overview'] = filtered_overview
+    
 
-    return checked_movie, recommended_movies
+    preprecessed_data = []
+    stringified_checkMovie = ' '.join(checked_movie['overview'])
+    preprecessed_data.append(stringified_checkMovie)
+    for movie in recommended_movies:
+        preprecessed_data.append(' '.join(movie['overview']))
+
+
+    return preprecessed_data
+
+
 
 X = [0,0,0]
 Y = [1,1,1]
@@ -77,9 +87,11 @@ stopwords = set(stopwords.words('english'))
 @app.route("/")
 def home():
     data = preprocess_text()
-    checked_movie, recommended_movies = data
-    return jsonify(recommended_movies)
-
+    vectorizer = TfidfVectorizer()
+    matrix = vectorizer.fit_transform(data)
+    cosine_sim = cosine_similarity(matrix[0:1], matrix)
+    #return matrix.toarray().tolist()
+    return cosine_sim.tolist()
 
 
 if __name__ == '__main__':
