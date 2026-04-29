@@ -1,23 +1,40 @@
-A full-stack web application built with the PERN stack that allows users to search, track, and manage their movie watchlists. The app integrates with the TMDB API and uses JWT for secure, stateless authentication.
+# Movie Tracker & Recommender
 
-🚀 Key Features
-TMDB Integration: Real-time movie searching and data fetching using the TheMovieDb API.
+A polyglot full-stack web application that allows users to search, track, and manage their movie watchlists with a personalized recommendation engine. Built using the PERN stack and a Python-based microservice.
 
-JWT Authentication: Secure user registration and login with encrypted passwords (bcrypt) and token-based sessions.
+## 🚀 Key Features
 
-Watchlist Management: Users can save movies to their personal PostgreSQL database.
+* **Polyglot Architecture:** Combines a **Node.js/Express** REST API for core operations with a **Python/Flask** microservice dedicated to the recommendation logic.
+* **Smart Recommendations:** A recommendation engine that analyzes the user's PostgreSQL watch history to suggest new movies based on genres and ratings.
+* **Advanced JWT Authentication:** Secure, stateless authentication system implementing **Access & Refresh Tokens** with **Bcrypt** password hashing for maximum security.
+* **TMDB Integration:** Seamless, real-time movie data fetching and searching via The Movie Database (TMDB) API.
+* **Watchlist Management:** Full CRUD functionality allowing users to maintain a persistent movie history and "to-watch" lists in a relational database.
+* **Responsive UI:** A modern, mobile-friendly interface built with **React** using Context API for efficient state management.
 
-Responsive UI: Built with React, ensuring a smooth experience across desktop and mobile.
+## 🛠 Tech Stack
 
-RESTful API: A clean Express.js backend managing communication between the frontend and the database.
+**Frontend**
+* React.js (Hooks, Context API)
+* Axios (API communication)
+* Tailwind CSS / Styled Components (opcjonalnie, zależy czego używasz)
 
-🛠 Tech Stack
-Frontend: React.js (Hooks, Context API/Redux)
+**Backend (API & Auth)**
+* Node.js & Express.js
+* JSON Web Tokens (JWT) with Refresh Token patterns
+* Bcrypt.js
 
-Backend: Node.js & Express.js
+**Backend (Recommendations)**
+* Python & Flask
+* Pandas / Scikit-learn (jeśli używasz ich do logiki rekomendacji)
 
-Database: PostgreSQL
+**Database**
+* PostgreSQL
 
-Auth: JSON Web Tokens (JWT) & Bcrypt
+**External Services**
+* TMDB API
 
-API: TMDB (The Movie Database)
+## ⚙️ Architecture
+
+The app uses a microservice-like approach:
+1.  **Main API (Node.js):** Handles user accounts, watchlist data, and serves as the primary gateway.
+2.  **Recommendation Service (Flask):** Consumes data from the PostgreSQL database to process and return personalized movie suggestions, demonstrating cross-language service communication.
