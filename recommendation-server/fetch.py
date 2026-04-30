@@ -20,25 +20,31 @@ def fetch_movie(movie_id):
 
 
 def fetch_data(movie_id):
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}/recommendations?api_key={TMDB_API_KEY}&language=en-US"
-    
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        data = response.json()
-        results = data.get('results', [])   
+    pages = 5
+    all_results = []
 
-        # if results:
-        #     print("\n--- PRZYKŁADOWY OBIEKT FILMU Z API ---")
-            # print(json.dumps(results[0], indent=4, ensure_ascii=False))
+    for page in range(1, pages + 1):
+        url = f"https://api.themoviedb.org/3/movie/{movie_id}/recommendations?api_key={TMDB_API_KEY}&language=en-US&page={page}"
+        response = requests.get(url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            results = data.get('results', [])
             
-            # print("\n--- LISTA TYTUŁÓW I ICH OPISÓW ---")
-            # for i, movie in enumerate(results[:5], 1):
-            #     print(f"{i}. {movie['title']} (ID: {movie['id']})")
-            #     print(f"   Opis: {movie['overview'][:100]}...")
-            #     print("-" * 20)
-
-        return [{"id": movie['id'], "title": movie['title'], "overview": movie['overview']} for movie in results]
-    else:
-        print(f"Error: {response.status_code}")
-        return []
+            if not results:
+                break
+                
+            for movie in results:
+                all_results.append({
+                    "id": movie['id'], 
+                    "title": movie['title'], 
+                    "overview": movie['overview']
+                })
+            
+            if page >= data.get('total_pages', 0):
+                break
+        else:
+            print(f"Error on page {page}: {response.status_code}")
+            break
+            
+    return all_results

@@ -107,7 +107,8 @@ def home():
     # "movie_1": m1,
     # "movie_2": m2
     # })
-    return jsonify(hashmap)
+    sorted_map = sorted(hashmap.items(), key=lambda x: x[1], reverse=True)
+    return jsonify(sorted_map)
 
 
 if __name__ == '__main__':
