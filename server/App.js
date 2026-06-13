@@ -13,6 +13,7 @@ const port = process.env.PORT || 5000;
 //const port = process.env.PORT || 3000;
 // CORS config
 const allowedOrigins = [
+  'https://filmy.jakkrol.pl',
   'https://superfilmy.onrender.com',
   'http://localhost:3000'
 ];
