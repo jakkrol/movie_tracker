@@ -15,45 +15,45 @@ import ProfilePage from './pages/UserProfile/ProfilePage';
 function App() {
   return (
     <div className="App">
-<div class="background">
-  <span class="ball"></span>
-  <span class="ball"></span>
-  <span class="ball"></span>
-  <span class="ball"></span>
-  <span class="ball"></span>
-  <span class="ball"></span>
-</div>
+      <div class="background">
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+      </div>
       <AuthProvider>
         <Router>
           <Routes>
-            <Route path='/' element={<LoginPage/>} />
-            <Route path='/register' element={<RegisterPage/>} />
+            <Route path='/' element={<LoginPage />} />
+            <Route path='/register' element={<RegisterPage />} />
             <Route path='/main' element={
               <RequireAuth>
-                <MainPage/>
+                <MainPage />
               </RequireAuth>
-              } />
-               <Route path='/main/details' element={
+            } />
+            <Route path='/main/details' element={
               <RequireAuth>
-                <MoviePreviewPage/>
+                <MoviePreviewPage />
               </RequireAuth>
-              } />
+            } />
             <Route path='/watchlist' element={
               <RequireAuth>
-                <WatchlistPage/>
+                <WatchlistPage />
               </RequireAuth>
-              } />
+            } />
             <Route path='/watchlist/details' element={
               <RequireAuth>
-                <MoviePreviewWatchlistPage/>
+                <MoviePreviewWatchlistPage />
               </RequireAuth>
-              } />
+            } />
 
             <Route path='/profile' element={
               <RequireAuth>
-                <ProfilePage/>
+                <ProfilePage />
               </RequireAuth>
-              } />
+            } />
           </Routes>
         </Router>
       </AuthProvider>

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 
-const handleResponse = (res, status, message, data=null) =>{
+const handleResponse = (res, status, message, data = null) => {
     res.status(status).json({
         status,
         message,
@@ -13,20 +13,20 @@ const handleResponse = (res, status, message, data=null) =>{
 };
 
 
-module.exports.userLogin = async (req, res, next) =>{
+module.exports.userLogin = async (req, res, next) => {
     const { login, password } = req.body;
-    try{
+    try {
         const user = await userLoginService(login);
         console.log(user);
-        if(!user || user.length == 0){ 
+        if (!user || user.length == 0) {
             return handleResponse(res, 404, "User not found");
-         }
+        }
         const isMatch = await bcrypt.compare(password, user.password);
-        if(isMatch){
+        if (isMatch) {
             const accessToken = jwt.sign(
                 { "login": user.login },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '10s' }
+                { expiresIn: '15m' }
             )
 
             const refreshToken = jwt.sign(
@@ -35,35 +35,35 @@ module.exports.userLogin = async (req, res, next) =>{
                 { expiresIn: '1d' }
             )
             //someSite needs to be None if in production, set Lax if for local testing
-            res.cookie('jwt', refreshToken, {httpOnly: true, secure: false, sameSite: 'Lax',  maxAge: 24*60*60*1000});
+            res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000 });
 
-            return handleResponse(res, 200, "Login success", {token: accessToken, user: user.login  });
-        }else{
+            return handleResponse(res, 200, "Login success", { token: accessToken, user: user.login });
+        } else {
             return handleResponse(res, 401, "Wrong password");
         }
-    }catch(err){
+    } catch (err) {
         next(err);
     }
 };
 
 
-module.exports.userRegister = async (req, res, next) =>{
+module.exports.userRegister = async (req, res, next) => {
     const { login, password } = req.body;
     console.log(req.body);
     console.log(login);
     console.log(password);
-    if(!login || !password || login.trim() == '' || password.trim() == ''){
+    if (!login || !password || login.trim() == '' || password.trim() == '') {
         return handleResponse(res, 404, "Username and password required and cannot be empty");
     }
-    try{
+    try {
         const hashedPass = await bcrypt.hash(password, 10);
         const user = await userRegisterService(login, hashedPass);
-        if(!user || user.length == 0){
+        if (!user || user.length == 0) {
             return handleResponse(res, 404, "Registration failed");
         }
         return handleResponse(res, 201, "Register success", { login, password });
-    }catch(err){
-        if(err.code == '23505'){
+    } catch (err) {
+        if (err.code == '23505') {
             return handleResponse(res, 409, "Username exists");
         }
         next(err);
@@ -72,24 +72,24 @@ module.exports.userRegister = async (req, res, next) =>{
 
 
 
-module.exports.addToWatchlist = async (req, res, next) =>{
+module.exports.addToWatchlist = async (req, res, next) => {
     console.log("JESTEŚMY TUUU!!!!!");
     const login = req.user;
     const { movieId, data } = req.body;
     console.log(data);
-    if(!movieId) {
+    if (!movieId) {
         return handleResponse(res, 400, "No movie id sended");
     }
-    try{
+    try {
         let movieExist = await checkIfMovieExist(movieId);
 
-        if(!movieExist){
+        if (!movieExist) {
             await addMovie(movieId, data);
         }
-        await addMovieToWatchlist(login, movieId);   
+        await addMovieToWatchlist(login, movieId);
         return handleResponse(res, 201, "Added to watchlist successfully");
-    }catch(err){
-        if(err.code == "23505"){
+    } catch (err) {
+        if (err.code == "23505") {
             return handleResponse(res, 409, "Movie already exist in user watchlist");
         }
         next(err);
@@ -122,7 +122,7 @@ module.exports.updateWatchlist = async (req, res, next) => {
     if (!movies || movies.length === 0) {
         return handleResponse(res, 400, "No movies provided for update");
     }
-    try{
+    try {
         const result = await userLoginService(login);
         if (!result || result.length == 0) {
             return handleResponse(res, 404, "User not found");
@@ -131,7 +131,7 @@ module.exports.updateWatchlist = async (req, res, next) => {
 
         await updateWatchlist(userId, movies);
         return handleResponse(res, 200, "Watchlist updated successfully");
-    }catch(err){
+    } catch (err) {
         next(err);
     }
 };
@@ -147,14 +147,14 @@ module.exports.deleteMovieWatchlist = async (req, res, next) => {
 
     try {
         const result = await userLoginService(login);
-        if(!result || result.length == 0) {
+        if (!result || result.length == 0) {
             return handleResponse(res, 404, "User not found");
         }
         const userId = result.id;
         //add delete logic here :)
         await deleteMoveFromWatchlist(userId, movieId);
         return handleResponse(res, 200, "Movie deleted from watchlist successfully");
-    }catch(err) {
+    } catch (err) {
         next(err);
     }
 }
@@ -164,13 +164,13 @@ module.exports.addReview = async (req, res, next) => {
     const login = req.user;
     const { movieId, review } = req.body;
 
-    if(!movieId || !review) {
+    if (!movieId || !review) {
         return handleResponse(res, 400, "Movie ID and review are required");
     }
 
-    try{
+    try {
         const user = await userLoginService(login);
-        if(!user || user.length == 0) {
+        if (!user || user.length == 0) {
             return handleResponse(res, 404, "User not found");
         }
         const userId = user.id;
@@ -178,8 +178,8 @@ module.exports.addReview = async (req, res, next) => {
         await addReviewDb(movieId, userId, review);
         return handleResponse(res, 201, "Review added successfully");
     }
-    catch(err) {
-        if(err.code == "23505") {
+    catch (err) {
+        if (err.code == "23505") {
             return handleResponse(res, 409, "Review already exists for this movie");
         }
         next(err);
@@ -189,17 +189,17 @@ module.exports.addReview = async (req, res, next) => {
 module.exports.getReviewsForMovie = async (req, res, next) => {
     const { movieId } = req.query;
 
-    if(!movieId) {
+    if (!movieId) {
         return handleResponse(res, 400, "Movie ID is required");
     }
 
     try {
         const reviews = await getReviewsForMovie(movieId);
-        if(reviews.length === 0) {
+        if (reviews.length === 0) {
             return handleResponse(res, 404, "No reviews found for this movie");
         }
         return handleResponse(res, 200, "Reviews retrieved successfully", reviews);
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 }
@@ -207,17 +207,17 @@ module.exports.getReviewsForMovie = async (req, res, next) => {
 module.exports.getProfileData = async (req, res, next) => {
     const user = req.user;
     const username = req.query.username;
-    if(!user) {
+    if (!user) {
         return handleResponse(res, 400, "Login is required");
     }
 
     try {
         const profileData = await getProfileData(username);
-        if(!profileData) {
+        if (!profileData) {
             return handleResponse(res, 404, "Profile not found");
         }
         return handleResponse(res, 200, "Profile data retrieved successfully", profileData);
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 }
