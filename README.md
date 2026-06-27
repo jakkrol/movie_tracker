@@ -1,10 +1,10 @@
 # Movie Tracker & Recommender
 
-A polyglot full-stack web application that allows users to search, track, and manage their movie watchlists with a personalized recommendation engine. Built using the PERN stack and a Python-based microservice.
+A polyglot full-stack web application that allows users to search, track, and manage their movie watchlists. Built using the PERN stack.
 
 ## 🚀 Key Features
 
-* **Polyglot Architecture:** Combines a **Node.js/Express** REST API for core operations with a **Python/Flask** microservice dedicated to the recommendation logic.
+* **Architecture:** Combines a **Node.js/Express** REST API for core operations.
 * **Smart Recommendations:** A recommendation engine that analyzes the user's PostgreSQL watch history to suggest new movies based on genres and ratings.
 * **Advanced JWT Authentication:** Secure, stateless authentication system implementing **Access & Refresh Tokens** with **Bcrypt** password hashing for maximum security.
 * **TMDB Integration:** Seamless, real-time movie data fetching and searching via The Movie Database (TMDB) API.
@@ -22,10 +22,6 @@ A polyglot full-stack web application that allows users to search, track, and ma
 * Node.js & Express.js
 * JSON Web Tokens (JWT) with Refresh Token patterns
 * Bcrypt.js
-
-**Backend (Recommendations)**
-* Python & Flask
-* Pandas / Scikit-learn (jeśli używasz ich do logiki rekomendacji)
 
 **Database**
 * PostgreSQL
