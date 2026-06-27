@@ -6,7 +6,7 @@ A polyglot full-stack web application that allows users to search, track, and ma
 
 * **Architecture:** Combines a **Node.js/Express** REST API for core operations.
 * **Smart Recommendations:** A recommendation engine that analyzes the user's PostgreSQL watch history to suggest new movies based on genres and ratings.
-* **Advanced JWT Authentication:** Secure, stateless authentication system implementing **Access & Refresh Tokens** with **Bcrypt** password hashing for maximum security.
+* **JWT Authentication:** Authentication system implementing **Access & Refresh Tokens** with **Bcrypt** password hashing.
 * **TMDB Integration:** Seamless, real-time movie data fetching and searching via The Movie Database (TMDB) API.
 * **Watchlist Management:** Full CRUD functionality allowing users to maintain a persistent movie history and "to-watch" lists in a relational database.
 * **Responsive UI:** A modern, mobile-friendly interface built with **React** using Context API for efficient state management.
